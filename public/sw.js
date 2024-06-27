@@ -27,11 +27,12 @@ if (workbox) {
   );
 
   // 处理导航请求
-  workbox.routing.registerNavigationRoute(
-    workbox.precaching.getCacheKeyForURL('/index.html'), {
-      denylist: [/^\/api\//] // 确保 API 调用不被路由到 index.html
-    }
-  );
+  const handler = workbox.precaching.createHandlerBoundToURL('/index.html');
+  const navigationRoute = new workbox.routing.NavigationRoute(handler, {
+    denylist: [/^\/api\//], // 确保 API 调用不被路由到 index.html
+  });
+
+  workbox.routing.registerRoute(navigationRoute);
 
 } else {
   console.log(`Boo! Workbox didn't load 😬`);
