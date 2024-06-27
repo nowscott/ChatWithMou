@@ -8,9 +8,5 @@
     ],
     "routes": [
       { "src": "/(.*)", "dest": "/" }
-    ],
-    "env": {
-      "QWEN_API_KEY": "@qwen_api_key",
-      "PORT": "3000"
-    }
+    ]
   }
