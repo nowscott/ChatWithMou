@@ -1,0 +1,83 @@
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+}
+
+#chat-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+}
+
+#chat-messages {
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-messages div {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 70%;
+  word-wrap: break-word;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#chat-messages .user-message {
+  align-self: flex-start;
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+#chat-messages .ai-message {
+  align-self: flex-end;
+  background-color: #cfe2ff;
+  color: #084298;
+}
+
+#input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  background: #f9f9f9;
+}
+
+#user-input {
+  width: 60%;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* 禁用手动调整输入框大小 */
+}
+
+#send-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+#send-button:hover {
+  background: #0056b3;
+}
+
+pre, code {
+  /* background: #f8f9fa; */
+  /* padding: 5px; */
+  border-radius: 5px;
+  overflow-x: auto;
+  white-space: pre-wrap; /* 确保代码块不会超出容器 */
+  word-wrap: break-word; /* 确保长代码自动换行 */
+}
