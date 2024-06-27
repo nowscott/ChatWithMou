@@ -3,26 +3,33 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox
 if (workbox) {
   console.log(`Yay! Workbox is loaded 🎉`);
 
-  // Precache files
-  workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+  // 定义要缓存的资源列表
+  const precacheResources = [
+    { url: 'index.html', revision: null },
+    { url: 'styles.css', revision: null },
+    { url: 'script.js', revision: null }
+  ];
 
-  // Cache API responses
+  // 预缓存和路由
+  workbox.precaching.precacheAndRoute(precacheResources);
+
+  // 缓存 API 响应
   workbox.routing.registerRoute(
     new RegExp('https://api.siliconflow.cn/.*'),
     new workbox.strategies.NetworkFirst({
       cacheName: 'api-cache',
       plugins: [
         new workbox.expiration.ExpirationPlugin({
-          maxAgeSeconds: 60 * 60 * 24, // 1 day
+          maxAgeSeconds: 60 * 60 * 24, // 1 天
         }),
       ],
     })
   );
 
-  // Handle navigation requests
+  // 处理导航请求
   workbox.routing.registerNavigationRoute(
     workbox.precaching.getCacheKeyForURL('/index.html'), {
-      denylist: [/^\/api\//] // Ensure API calls aren't routed to index.html
+      denylist: [/^\/api\//] // 确保 API 调用不被路由到 index.html
     }
   );
 
