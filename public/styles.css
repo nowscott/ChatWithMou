@@ -5,6 +5,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f4f4f9;
+  font-size: large;
 }
 
 #chat-container {
@@ -22,8 +23,8 @@ body {
 
 #chat-messages div {
   margin: 10px 0;
-  padding: 10px;
-  border-radius: 15px;
+  padding: 15px;
+  border-radius: 5px;
   max-width: 70%;
   word-wrap: break-word;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -52,32 +53,90 @@ body {
 
 #user-input {
   width: 60%;
-  height: 40px;
-  padding: 10px;
-  border: 1px solid #ccc;
+  height: 35px;
+  padding: 5px;
+  margin: 5px;
+  max-height: 150px; /* 设置最大高度 */
+  border: 1px solid #d96868;
   border-radius: 5px;
   resize: none; /* 禁用手动调整输入框大小 */
+  overflow-y: auto; /* 超过最大高度时显示滚动条 */
+}
+
+#send-button, #delete-button {
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin: 5px;
 }
 
 #send-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
   background: #007bff;
-  color: #fff;
-  cursor: pointer;
-  margin-left: 10px;
 }
 
 #send-button:hover {
   background: #0056b3;
 }
 
+#delete-button {
+  background: #dc3545;
+}
+
+#delete-button:hover {
+  background: #c82333;
+}
+
 pre, code {
-  /* background: #f8f9fa; */
-  /* padding: 5px; */
-  border-radius: 5px;
+  background-color: #272822;
+  color: lightyellow;
+  padding: 2px;
+  border-radius: 3px;
   overflow-x: auto;
-  white-space: pre-wrap; /* 确保代码块不会超出容器 */
-  word-wrap: break-word; /* 确保长代码自动换行 */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  #chat-container {
+    padding: 10px;
+  }
+
+  #chat-messages div {
+    max-width: 90%;
+    padding: 8px;
+  }
+
+  #user-input {
+    width: 70%;
+    height: 35px;
+  }
+
+  #send-button, #delete-button {
+    padding: 8px 16px;
+    margin-left: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  #chat-container {
+    padding: 10px;
+  }
+
+  #chat-messages div {
+    max-width: 90%;
+    padding: 10px;
+  }
+
+  #user-input {
+    width: 80%;
+    height: 30px;
+  }
+
+  #send-button, #delete-button {
+    padding: 5px 10px;
+    margin-left: 3px;
+  }
 }
