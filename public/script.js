@@ -1,7 +1,37 @@
 let conversationHistory = [];
 
+function adjustInputHeight() {
+  const userInput = document.getElementById('user-input');
+  userInput.style.height = 'auto';
+  userInput.style.height = (userInput.scrollHeight) + 'px';
+}
+
+// 载入历史对话
+function loadConversationHistory() {
+  const history = localStorage.getItem('conversationHistory');
+  if (history) {
+    conversationHistory = JSON.parse(history);
+    const chatMessages = document.getElementById('chat-messages');
+    conversationHistory.forEach(message => {
+      const messageElement = document.createElement('div');
+      const roleClass = message.role === 'user' ? 'user-message' : 'ai-message';
+      messageElement.classList.add(roleClass);
+      if (message.role === 'user') {
+        messageElement.textContent = `用户: ${message.content}`;
+      } else {
+        messageElement.innerHTML = `Qwen: ${marked.parse(message.content)}`;
+      }
+      chatMessages.appendChild(messageElement);
+    });
+  }
+}
+
+// 保存对话历史到 localStorage
+function saveConversationHistory() {
+  localStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+}
+
 function countTokens(message) {
-  // 简单的估算 token 数量的方法，可以根据实际情况进行调整
   return message.content.length;
 }
 
@@ -26,10 +56,7 @@ function sendMessage() {
   const userInput = document.getElementById('user-input').value;
   if (!userInput) return;
 
-  // 将用户输入添加到对话历史中
   conversationHistory.push({ role: 'user', content: userInput });
-
-  // 截断对话历史，确保总 token 数量不超过 32768
   conversationHistory = trimConversationHistory(conversationHistory, 32768);
 
   const chatMessages = document.getElementById('chat-messages');
@@ -38,6 +65,9 @@ function sendMessage() {
   userMessage.classList.add('user-message');
   chatMessages.appendChild(userMessage);
   document.getElementById('user-input').value = '';
+  adjustInputHeight(); // 调整输入框高度
+
+  saveConversationHistory();
 
   const options = {
     method: 'POST',
@@ -47,7 +77,7 @@ function sendMessage() {
     },
     body: JSON.stringify({
       model: 'Qwen/Qwen2-7B-Instruct',
-      messages: conversationHistory, // 发送对话历史
+      messages: conversationHistory,
       max_tokens: 4096,
       temperature: 0.7,
       top_p: 0.7,
@@ -61,19 +91,20 @@ function sendMessage() {
     .then(response => response.text())
     .then(text => {
       let jsonString = text.replace(/data: /g, '').replace(/\n/g, '');
-      jsonString = jsonString.replace(/\[DONE\]$/, ''); // 移除多余的 [DONE]
+      jsonString = jsonString.replace(/\[DONE\]$/, '');
 
       try {
         const data = JSON.parse(jsonString);
-        // console.log('API response:', data); // 调试信息
         if (data.choices && data.choices.length > 0) {
           const aiResponse = data.choices[0].message.content;
-          conversationHistory.push({ role: 'assistant', content: aiResponse }); // 将AI回复添加到对话历史中
+          conversationHistory.push({ role: 'assistant', content: aiResponse });
           
           const aiMessage = document.createElement('div');
-          aiMessage.innerHTML = `Qwen: ${marked.parse(aiResponse)}`; // 使用 marked 解析 Markdown
+          aiMessage.innerHTML = `Qwen: ${marked.parse(aiResponse)}`;
           aiMessage.classList.add('ai-message');
           chatMessages.appendChild(aiMessage);
+          
+          saveConversationHistory();
         } else {
           const errorMessage = document.createElement('div');
           errorMessage.textContent = `Qwen: 无法获取响应，请稍后重试。`;
@@ -81,7 +112,7 @@ function sendMessage() {
         }
       } catch (error) {
         console.error('JSON parse error:', error);
-        console.log('Raw JSON string:', jsonString); // 输出原始 JSON 字符串进行调试
+        console.log('Raw JSON string:', jsonString);
         const errorMessage = document.createElement('div');
         errorMessage.textContent = `Qwen: JSON 解析失败，请稍后重试。`;
         chatMessages.appendChild(errorMessage);
@@ -95,10 +126,22 @@ function sendMessage() {
     });
 }
 
+function deleteConversationHistory() {
+  if (confirm('是否确认删除所有对话记录？')) {
+    conversationHistory = [];
+    localStorage.removeItem('conversationHistory');
+    document.getElementById('chat-messages').innerHTML = '';
+  }
+}
+
 document.getElementById('send-button').addEventListener('click', sendMessage);
+document.getElementById('delete-button').addEventListener('click', deleteConversationHistory);
+document.getElementById('user-input').addEventListener('input', adjustInputHeight);
 document.getElementById('user-input').addEventListener('keypress', function (e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 });
+
+window.onload = loadConversationHistory;

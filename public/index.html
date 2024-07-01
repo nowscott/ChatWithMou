@@ -15,19 +15,9 @@
   <div id="input-container">
     <textarea id="user-input" placeholder="请输入..."></textarea>
     <button id="send-button">发送</button>
+    <button id="delete-button">删除</button>
   </div>
 
   <script src="script.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }).catch(error => {
-          console.log('ServiceWorker registration failed: ', error);
-        });
-      });
-    }
-  </script>
 </body>
 </html>
