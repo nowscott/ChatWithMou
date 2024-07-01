@@ -10,7 +10,7 @@ body {
 
 #chat-container {
   flex: 1;
-  padding: 20px;
+  padding: 2vh 5vw;
   overflow-y: auto;
   border-bottom: 1px solid #ccc;
   background-color: #fff;
@@ -31,13 +31,13 @@ body {
 }
 
 #chat-messages .user-message {
-  align-self: flex-start;
+  align-self: flex-end;
   background-color: #d1e7dd;
   color: #0f5132;
 }
 
 #chat-messages .ai-message {
-  align-self: flex-end;
+  align-self: flex-start;
   background-color: #cfe2ff;
   color: #084298;
 }
@@ -101,7 +101,7 @@ pre, code {
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
   #chat-container {
-    padding: 10px;
+    padding: 1vh 3vw;
   }
 
   #chat-messages div {
@@ -122,7 +122,7 @@ pre, code {
 
 @media (max-width: 480px) {
   #chat-container {
-    padding: 10px;
+    padding: 1vh 3vw;
   }
 
   #chat-messages div {
@@ -131,7 +131,7 @@ pre, code {
   }
 
   #user-input {
-    width: 80%;
+    width: 60%;
     height: 30px;
   }
 
