@@ -40,10 +40,12 @@ const App = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen overflow-hidden">
             <NavBar selectedModel={selectedModel} onModelChange={handleModelChange} />
-            <MessageList messages={messages} onDelete={deleteMessage} />
-            <div className="bg-blue-100 py-2 px-4 border-t border-white">
+            <div className="flex-1 overflow-auto  mt-12 mb-12"> {/* 增加 mt-16 和 mb-20 来为导航栏和输入框腾出空间 */}
+                <MessageList messages={messages} onDelete={deleteMessage} />
+            </div>
+            <div className="fixed bottom-0 w-full bg-blue-100 py-2 px-4 border-t border-white">
                 <InputPrompt onSend={handleSend} onClear={clearMessages} />
             </div>
             {submittedPrompt && (
