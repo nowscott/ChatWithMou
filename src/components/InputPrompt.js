@@ -18,30 +18,44 @@ const InputPrompt = ({ onSend, onClear }) => {
 
     const handleKeyDown = (e) => {
         if (!isComposing && e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault(); // 防止默认的换行行为
+            e.preventDefault();
             handleSend();
         }
     };
 
     const handleSend = () => {
-        if (prompt.trim() === '') return; // 如果提示为空，则不发送
+        if (prompt.trim() === '') return;
         onSend(prompt);
-        setPrompt(''); // 发送后清空输入框
+        setPrompt('');
     };
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-white p-4 border-t shadow-md flex items-center space-x-2">
-            <input
-                value={prompt}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                onCompositionStart={handleCompositionStart}
-                onCompositionEnd={handleCompositionEnd}
-                placeholder="输入你的提示词"
-                className="flex-1 border rounded p-2"
-            />
-            <button onClick={handleSend} className="bg-blue-500 text-white px-4 py-2 rounded">发送</button>
-            <button onClick={onClear} className="bg-red-500 text-white px-4 py-2 rounded">清空消息记录</button>
+        <div className="w-full p-4 bg-white border-t border-gray-300">
+            <div className="flex flex-col md:flex-row md:items-center w-full">
+                <input
+                    className="w-full px-4 py-2 border rounded mb-2 md:mb-0 md:mr-2"
+                    value={prompt}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    onCompositionStart={handleCompositionStart}
+                    onCompositionEnd={handleCompositionEnd}
+                    placeholder="输入你的提示词"
+                />
+                <div className="flex flex-col md:flex-row md:items-center w-full md:w-auto">
+                    <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded mb-2 md:mb-0 md:mr-2 whitespace-nowrap"
+                        onClick={handleSend}
+                    >
+                        发送
+                    </button>
+                    <button
+                        className="px-4 py-2 bg-red-500 text-white rounded whitespace-nowrap"
+                        onClick={onClear}
+                    >
+                        清空消息记录
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
