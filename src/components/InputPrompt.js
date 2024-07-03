@@ -13,7 +13,9 @@ const InputPrompt = ({ onSend, onClear }) => {
     };
 
     const handleCompositionEnd = () => {
-        setIsComposing(false);
+        setTimeout(() => {
+            setIsComposing(false);
+        }, 0);
     };
 
     const handleKeyDown = (e) => {
