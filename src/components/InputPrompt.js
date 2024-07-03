@@ -29,6 +29,13 @@ const InputPrompt = ({ onSend, onClear }) => {
         setPrompt('');
     };
 
+    const handleClear = () => {
+        const confirmed = window.confirm('确定要清空消息记录吗？');
+        if (confirmed) {
+            onClear();
+        }
+    };
+
     return (
         <div className="w-full p-4 bg-white border-t border-gray-300">
             <div className="flex flex-col md:flex-row md:items-center w-full">
@@ -50,7 +57,7 @@ const InputPrompt = ({ onSend, onClear }) => {
                     </button>
                     <button
                         className="px-4 py-2 bg-red-500 text-white rounded whitespace-nowrap"
-                        onClick={onClear}
+                        onClick={handleClear}
                     >
                         清空消息记录
                     </button>
