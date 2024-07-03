@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate }) => {
+const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
     useEffect(() => {
-        const apiKey = process.env.REACT_APP_QWEN_API_KEY;
+        const apiKey = process.env.REACT_APP_API_KEY;
         const options = {
             method: 'POST',
             headers: {
@@ -11,7 +11,7 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate }) => {
                 authorization: `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'Qwen/Qwen2-7B-Instruct',
+                model: model,
                 messages: [{ role: 'user', content: prompt }],
                 max_tokens: 4096,
                 temperature: 0.7,
@@ -30,7 +30,7 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate }) => {
                 function read() {
                     reader.read().then(({ done, value }) => {
                         if (done) {
-                            console.log('流式响应已结束');
+                            // console.log('流式响应已结束');
                             return;
                         }
                         const text = decoder.decode(value, { stream: true });

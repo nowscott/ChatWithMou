@@ -3,11 +3,13 @@ import ChatAPI from './components/ChatAPI';
 import InputPrompt from './components/InputPrompt';
 import MessageHistory from './components/MessageHistory';
 import MessageList from './components/MessageList';
+import NavBar from './components/NavBar';
 
-const MainComponent = () => {
-    const { messages, addUserMessage, addAIMessage, updateMessage, clearMessages } = MessageHistory();
-    const [submittedPrompt, setSubmittedPrompt] = useState(''); 
+const App = () => {
+    const { messages, addUserMessage, addAIMessage, updateMessage, clearMessages, deleteMessage } = MessageHistory();
+    const [submittedPrompt, setSubmittedPrompt] = useState('');
     const [aiMessageMid, setAiMessageMid] = useState(null);
+    const [selectedModel, setSelectedModel] = useState(localStorage.getItem('selectedModel') || 'Qwen/Qwen2-7B-Instruct');
 
     const handleContentUpdate = (newContent) => {
         updateMessage(aiMessageMid, prevMessage => ({
@@ -32,10 +34,16 @@ const MainComponent = () => {
         setSubmittedPrompt(fullPrompt);
     };
 
+    const handleModelChange = (model) => {
+        setSelectedModel(model);
+        localStorage.setItem('selectedModel', model);
+    };
+
     return (
         <div className="flex flex-col h-screen">
-            <MessageList messages={messages} />
-            <div className="bg-gray-100 p-4 border-t border-gray-300">
+            <NavBar selectedModel={selectedModel} onModelChange={handleModelChange} />
+            <MessageList messages={messages} onDelete={deleteMessage} />
+            <div className="bg-blue-100 p-4 border-t border-white">
                 <InputPrompt onSend={handleSend} onClear={clearMessages} />
             </div>
             {submittedPrompt && (
@@ -43,10 +51,11 @@ const MainComponent = () => {
                     prompt={submittedPrompt}
                     onContentUpdate={handleContentUpdate}
                     onTokenUpdate={handleTokenUpdate}
+                    model={selectedModel}
                 />
             )}
         </div>
     );
 };
 
-export default MainComponent;
+export default App;
