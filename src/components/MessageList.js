@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import copy from 'copy-to-clipboard';
+import { HiOutlineDuplicate, HiCheckCircle } from 'react-icons/hi';
 
 const MessageList = ({ messages }) => {
     const messageEndRef = useRef(null);
@@ -19,10 +20,6 @@ const MessageList = ({ messages }) => {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, []);
 
     const handleCopy = useCallback((content, messageId) => {
         copy(content);
@@ -57,7 +54,7 @@ const MessageList = ({ messages }) => {
                         className="absolute top-2 right-2 text-xs text-blue-500"
                         onClick={() => handleCopy(content, messageId)}
                     >
-                        {copied === messageId ? '复制成功' : '复制'}
+                        {copied === messageId ? <HiCheckCircle className="h-4 w-4 text-green-500" /> : <HiOutlineDuplicate className="h-4 w-4" />}
                     </button>
                 </div>
             ) : (
@@ -69,8 +66,7 @@ const MessageList = ({ messages }) => {
     };
 
     return (
-        <div className="flex-1 overflow-auto">
-            <h1 className="text-3xl font-bold p-4">Chat With Qwen</h1>
+        <div className="flex-1 overflow-auto p-4">
             {messages.map((message) => (
                 <div key={message.mid} className="bg-white shadow-md rounded-lg p-4 m-4 relative">
                     <div>
@@ -87,7 +83,7 @@ const MessageList = ({ messages }) => {
                         className="absolute bottom-2 right-2 text-xs text-blue-500"
                         onClick={() => handleCopy(message.content, message.mid)}
                     >
-                        {copied === message.mid ? '复制成功' : '复制'}
+                        {copied === message.mid ? <HiCheckCircle className="h-4 w-4 text-green-500" /> : <HiOutlineDuplicate className="h-4 w-4" />}
                     </button>
                 </div>
             ))}

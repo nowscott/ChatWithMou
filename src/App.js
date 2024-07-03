@@ -3,11 +3,13 @@ import ChatAPI from './components/ChatAPI';
 import InputPrompt from './components/InputPrompt';
 import MessageHistory from './components/MessageHistory';
 import MessageList from './components/MessageList';
+import NavBar from './components/NavBar';
 
-const MainComponent = () => {
+const App = () => {
     const { messages, addUserMessage, addAIMessage, updateMessage, clearMessages } = MessageHistory();
-    const [submittedPrompt, setSubmittedPrompt] = useState(''); 
+    const [submittedPrompt, setSubmittedPrompt] = useState('');
     const [aiMessageMid, setAiMessageMid] = useState(null);
+    const [selectedModel, setSelectedModel] = useState('Qwen/Qwen2-7B-Instruct');
 
     const handleContentUpdate = (newContent) => {
         updateMessage(aiMessageMid, prevMessage => ({
@@ -34,8 +36,9 @@ const MainComponent = () => {
 
     return (
         <div className="flex flex-col h-screen">
-            <MessageList messages={messages} />
-            <div className="bg-gray-100 p-4 border-t border-gray-300">
+            <NavBar selectedModel={selectedModel} onModelChange={setSelectedModel} />
+            <div className="flex flex-col flex-1 overflow-auto lg:mx-40 md:mx-20 sm:mx-10">
+                <MessageList messages={messages} />
                 <InputPrompt onSend={handleSend} onClear={clearMessages} />
             </div>
             {submittedPrompt && (
@@ -43,10 +46,11 @@ const MainComponent = () => {
                     prompt={submittedPrompt}
                     onContentUpdate={handleContentUpdate}
                     onTokenUpdate={handleTokenUpdate}
+                    model={selectedModel}
                 />
             )}
         </div>
     );
 };
 
-export default MainComponent;
+export default App;

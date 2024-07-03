@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HiOutlineTrash, HiOutlineAnnotation } from "react-icons/hi";
 
 const InputPrompt = ({ onSend, onClear }) => {
     const [prompt, setPrompt] = useState('');
@@ -13,9 +14,7 @@ const InputPrompt = ({ onSend, onClear }) => {
     };
 
     const handleCompositionEnd = () => {
-        setTimeout(() => {
-            setIsComposing(false);
-        }, 0);
+        setIsComposing(false);
     };
 
     const handleKeyDown = (e) => {
@@ -39,10 +38,16 @@ const InputPrompt = ({ onSend, onClear }) => {
     };
 
     return (
-        <div className="w-full p-4 bg-white border-t border-gray-300">
-            <div className="flex flex-col md:flex-row md:items-center w-full">
+        <div className="w-full p-2 bg-white border-t border-gray-300 flex items-center">
+            <div className="flex flex-grow items-center border rounded  mx-4">
+                <button
+                    className="p-1 text-red-500"
+                    onClick={handleClear}
+                >
+                    <HiOutlineTrash className="h-6 w-6" />
+                </button>
                 <input
-                    className="w-full px-4 py-2 border rounded mb-2 md:mb-0 md:mr-2"
+                    className="w-full px-2 py-1 border-none outline-none"
                     value={prompt}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
@@ -50,20 +55,12 @@ const InputPrompt = ({ onSend, onClear }) => {
                     onCompositionEnd={handleCompositionEnd}
                     placeholder="输入你的提示词"
                 />
-                <div className="flex flex-col md:flex-row md:items-center w-full md:w-auto">
-                    <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded mb-2 md:mb-0 md:mr-2 whitespace-nowrap"
-                        onClick={handleSend}
-                    >
-                        发送
-                    </button>
-                    <button
-                        className="px-4 py-2 bg-red-500 text-white rounded whitespace-nowrap"
-                        onClick={handleClear}
-                    >
-                        清空消息记录
-                    </button>
-                </div>
+                <button
+                    className="p-1 text-blue-500"
+                    onClick={handleSend}
+                >
+                    <HiOutlineAnnotation className="h-6 w-6" />
+                </button>
             </div>
         </div>
     );

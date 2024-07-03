@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 
-const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate }) => {
+const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
     useEffect(() => {
-        const apiKey = process.env.REACT_APP_QWEN_API_KEY;
+        const apiKey = process.env.REACT_APP_API_KEY;
+        console.log(model);
         const options = {
             method: 'POST',
             headers: {
@@ -11,7 +12,7 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate }) => {
                 authorization: `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'Qwen/Qwen2-7B-Instruct',
+                model: model,
                 messages: [{ role: 'user', content: prompt }],
                 max_tokens: 4096,
                 temperature: 0.7,
