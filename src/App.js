@@ -42,8 +42,10 @@ const App = () => {
     return (
         <div className="flex flex-col h-screen overflow-hidden">
             <NavBar selectedModel={selectedModel} onModelChange={handleModelChange} />
-            <div className="flex-1 overflow-auto  mt-12 mb-12"> {/* 增加 mt-16 和 mb-20 来为导航栏和输入框腾出空间 */}
-                <MessageList messages={messages} onDelete={deleteMessage} />
+            <div className="flex-1 overflow-y-auto mt-12 mb-12 flex flex-col-reverse"> {/* 使用 flex-col-reverse 确保消息列表从底部开始 */}
+                <div className="flex flex-col justify-end"> {/* 使用 flex-col 和 justify-end 确保消息出现在底部 */}
+                    <MessageList messages={messages} onDelete={deleteMessage} />
+                </div>
             </div>
             <div className="fixed bottom-0 w-full bg-blue-100 py-2 px-4 border-t border-white">
                 <InputPrompt onSend={handleSend} onClear={clearMessages} />

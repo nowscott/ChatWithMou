@@ -61,7 +61,7 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     return (
-        <div className="flex-1 overflow-auto p-4 max-h-full">
+        <div className="flex-1 overflow-auto p-4">
             {messages.map((message) => (
                 <div key={message.mid} className="bg-white shadow-md rounded-lg px-4 mb-4 relative max-w-screen-lg lg:w-3/5 mx-auto">
                     <div>
