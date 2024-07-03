@@ -13,9 +13,19 @@ const NavBar = ({ selectedModel, onModelChange }) => {
     const [title, setTitle] = useState('Qwen');
 
     useEffect(() => {
+        const savedModel = localStorage.getItem('selectedModel');
+        if (savedModel) {
+            onModelChange(savedModel);
+        }
+    }, [onModelChange]);
+
+    useEffect(() => {
         const selected = models.find(model => model.value === selectedModel);
         if (selected) {
             setTitle(selected.title);
+        }
+        if (selectedModel) {
+            localStorage.setItem('selectedModel', selectedModel);
         }
     }, [selectedModel]);
 

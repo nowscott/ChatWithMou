@@ -55,7 +55,12 @@ const MessageHistory = () => {
         localStorage.removeItem('messages');
         setMessages([]);
     };
-    return { messages, addMessage, updateMessage, addUserMessage, addAIMessage, clearMessages };
+
+    const deleteMessage = (mid) => {
+        setMessages(prevMessages => prevMessages.filter(msg => msg.mid !== mid));
+    };
+
+    return { messages, addMessage, updateMessage, addUserMessage, addAIMessage, clearMessages, deleteMessage };
 };
 
 export default MessageHistory;

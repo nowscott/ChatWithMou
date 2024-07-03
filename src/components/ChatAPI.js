@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
     useEffect(() => {
         const apiKey = process.env.REACT_APP_API_KEY;
-        console.log(model);
         const options = {
             method: 'POST',
             headers: {
@@ -31,7 +30,7 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
                 function read() {
                     reader.read().then(({ done, value }) => {
                         if (done) {
-                            console.log('流式响应已结束');
+                            // console.log('流式响应已结束');
                             return;
                         }
                         const text = decoder.decode(value, { stream: true });
