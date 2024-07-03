@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks'; // 引入 remark-breaks 插件
-import { HiOutlineTrash, HiOutlineDuplicate, HiCheckCircle, HiExclamation } from 'react-icons/hi'; // 引入 HiExclamation
+import remarkBreaks from 'remark-breaks';
+import { HiOutlineTrash, HiOutlineDuplicate, HiCheckCircle, HiExclamation } from 'react-icons/hi';
 import CodeBlock from './CodeBlock';
 import copy from 'copy-to-clipboard';
 
@@ -61,14 +61,14 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     return (
-        <div className="flex-1 overflow-auto px-4">
+        <div className="flex-1 overflow-auto p-4">
             {messages.map((message) => (
-                <div key={message.mid} className="bg-white shadow-md rounded-lg p-4 m-4 relative max-w-screen-lg lg:w-3/5 mx-auto">
+                <div key={message.mid} className="bg-white shadow-md rounded-lg px-4 mb-4 relative max-w-screen-lg lg:w-3/5 mx-auto">
                     <div>
                         <strong>{message.role === 'user' ? '你' : 'AI'}:</strong>
                         <ReactMarkdown 
                             components={customRenderers} 
-                            remarkPlugins={[remarkGfm, remarkBreaks]} // 使用 remark-breaks 插件
+                            remarkPlugins={[remarkGfm, remarkBreaks]}
                             className="whitespace-pre-wrap break-words"
                         >
                             {message.content}
