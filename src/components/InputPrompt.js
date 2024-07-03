@@ -45,7 +45,7 @@ const InputPrompt = ({ onSend, onClear }) => {
     }, [prompt]);
 
     return (
-        <div className="w-full p-2 px-4 bg-white rounded flex items-center">
+        <div className="w-full p-2 px-4 bg-white rounded flex items-center max-w-screen-lg lg:w-3/5 mx-auto"> {/* 使用 Tailwind CSS 类 */}
             <div className="flex flex-grow items-center border rounded border-gray-300 bg-white">
                 <button
                     className="p-1 text-red-500"
@@ -54,8 +54,8 @@ const InputPrompt = ({ onSend, onClear }) => {
                     <HiOutlineTrash className="h-6 w-6" />
                 </button>
                 <textarea
-                    className="w-full px-2 py-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap"
-                    style={{ maxHeight: '10rem', minHeight: '2rem' }}
+                    className="text-sm w-full px-2 py-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words"
+                    style={{ maxHeight: '10rem', minHeight: '1rem' }}
                     rows="1"
                     value={prompt}
                     onChange={handleChange}

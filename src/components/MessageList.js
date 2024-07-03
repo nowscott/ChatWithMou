@@ -3,13 +3,14 @@ import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks'; // 引入 remark-breaks 插件
-import { HiOutlineTrash, HiOutlineDuplicate, HiCheckCircle } from 'react-icons/hi';
+import { HiOutlineTrash, HiOutlineDuplicate, HiCheckCircle, HiExclamation } from 'react-icons/hi'; // 引入 HiExclamation
 import CodeBlock from './CodeBlock';
 import copy from 'copy-to-clipboard';
 
 const MessageList = ({ messages, onDelete }) => {
     const messageEndRef = useRef(null);
     const [copied, setCopied] = useState(null);
+    const [pendingDelete, setPendingDelete] = useState({});
 
     const scrollToBottom = () => {
         if (messageEndRef.current) {
@@ -29,6 +30,21 @@ const MessageList = ({ messages, onDelete }) => {
         }, 5000);
     }, []);
 
+    const handleDeleteClick = (messageId) => {
+        if (pendingDelete[messageId]) {
+            onDelete(messageId);
+        } else {
+            setPendingDelete({ ...pendingDelete, [messageId]: true });
+            setTimeout(() => {
+                setPendingDelete((prev) => {
+                    const newState = { ...prev };
+                    delete newState[messageId];
+                    return newState;
+                });
+            }, 5000);
+        }
+    };
+
     const customRenderers = {
         p: ({ node, ...props }) => <p {...props} />,
         code: ({ node, inline, className, children, ...props }) => {
@@ -45,9 +61,9 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     return (
-        <div className="flex-1 overflow-auto p-4">
+        <div className="flex-1 overflow-auto px-4">
             {messages.map((message) => (
-                <div key={message.mid} className="bg-white shadow-md rounded-lg p-4 m-4 relative">
+                <div key={message.mid} className="bg-white shadow-md rounded-lg p-4 m-4 relative max-w-screen-lg lg:w-3/5 mx-auto">
                     <div>
                         <strong>{message.role === 'user' ? '你' : 'AI'}:</strong>
                         <ReactMarkdown 
@@ -64,10 +80,10 @@ const MessageList = ({ messages, onDelete }) => {
                     )}
                     <div className="absolute bottom-2 right-2 flex space-x-2">
                         <button
-                            className="text-xs text-red-500"
-                            onClick={() => onDelete(message.mid)}
+                            className={`text-xs ${pendingDelete[message.mid] ? 'text-red-500' : 'text-green-700'}`}
+                            onClick={() => handleDeleteClick(message.mid)}
                         >
-                            <HiOutlineTrash className="h-4 w-4" />
+                            {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-red-500" /> : <HiOutlineTrash className="h-4 w-4" />}
                         </button>
                         <button
                             className="text-xs text-blue-500"

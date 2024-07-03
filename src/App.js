@@ -43,7 +43,7 @@ const App = () => {
         <div className="flex flex-col h-screen">
             <NavBar selectedModel={selectedModel} onModelChange={handleModelChange} />
             <MessageList messages={messages} onDelete={deleteMessage} />
-            <div className="bg-blue-100 p-4 border-t border-white">
+            <div className="bg-blue-100 py-2 px-4 border-t border-white">
                 <InputPrompt onSend={handleSend} onClear={clearMessages} />
             </div>
             {submittedPrompt && (
