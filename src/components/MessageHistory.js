@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const MessageHistory = () => {
     const [messages, setMessages] = useState([]);
+    const isFirstRender = useRef(true);
 
     // 加载初始消息
     useEffect(() => {
@@ -12,7 +13,11 @@ const MessageHistory = () => {
 
     // 保存消息到 localStorage
     useEffect(() => {
-        localStorage.setItem('messages', JSON.stringify(messages));
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+        } else {
+            localStorage.setItem('messages', JSON.stringify(messages));
+        }
     }, [messages]);
 
     const addMessage = useCallback((message) => {
@@ -20,8 +25,8 @@ const MessageHistory = () => {
     }, []);
 
     const updateMessage = useCallback((mid, update) => {
-        setMessages(prevMessages => 
-            prevMessages.map(msg => 
+        setMessages(prevMessages =>
+            prevMessages.map(msg =>
                 msg.mid === mid ? { ...msg, ...(typeof update === 'function' ? update(msg) : update) } : msg
             )
         );
@@ -62,7 +67,7 @@ const MessageHistory = () => {
         setMessages(prevMessages => prevMessages.filter(msg => msg.mid !== mid));
     }, []);
 
-    return { messages, addMessage, updateMessage, addUserMessage, addAIMessage, clearMessages, deleteMessage };
+    return { messages, addUserMessage, addAIMessage, updateMessage, clearMessages, deleteMessage };
 };
 
 export default MessageHistory;
