@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import CaptureScreen from './MessageExporter';
 
 const models = [
     { value: 'Qwen/Qwen2-7B-Instruct', title: 'Qwen' },
@@ -9,7 +10,7 @@ const models = [
     { value: '01-ai/Yi-1.5-9B-Chat-16K', title: '「零一」' }
 ];
 
-const NavBar = ({ selectedModel, onModelChange }) => {
+const NavBar = ({ selectedModel, onModelChange, targetRef }) => {
     const [title, setTitle] = useState('Qwen');
 
     useEffect(() => {
@@ -30,20 +31,23 @@ const NavBar = ({ selectedModel, onModelChange }) => {
     }, [selectedModel]);
 
     return (
-        <div className="bg-blue-300 text-white p-2 px-4 flex justify-between items-center fixed top-0 left-0 right-0 z-10">
-            <h1 className="text-nowrap font-serif text-2xl font-bold">
-                <span className="hidden sm:inline">Chat With </span>
-                {title}
-            </h1>
-            <select
-                className="bg-white font-serif text-black p-2 rounded"
-                value={selectedModel}
-                onChange={(event) => onModelChange(event.target.value)}
-            >
-                {models.map(model => (
-                    <option key={model.value} value={model.value}>{model.value}</option>
-                ))}
-            </select>
+        <div className='flex-0'>
+            <div className="flex bg-blue-300 text-white p-2 px-4 justify-between items-center top-0 left-0 right-0">
+                <h1 className="text-nowrap font-serif text-2xl font-bold">
+                    <span className="hidden sm:inline">Chat With </span>
+                    {title}
+                </h1>
+                <select
+                    className="bg-white font-serif text-black p-2 rounded"
+                    value={selectedModel}
+                    onChange={(event) => onModelChange(event.target.value)}
+                >
+                    {models.map(model => (
+                        <option key={model.value} value={model.value}>{model.value}</option>
+                    ))}
+                </select>
+                <CaptureScreen targetRef={targetRef} />
+            </div>
         </div>
     );
 };

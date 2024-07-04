@@ -8,8 +8,10 @@ import copy from 'copy-to-clipboard';
 
 const MessageList = ({ messages, onDelete }) => {
     const messageEndRef = useRef(null);
+    const containerRef = useRef(null);
     const [copied, setCopied] = useState(null);
     const [pendingDelete, setPendingDelete] = useState({});
+    const [hasScrollbar, setHasScrollbar] = useState(false);
 
     const scrollToBottom = () => {
         if (messageEndRef.current) {
@@ -21,8 +23,26 @@ const MessageList = ({ messages, onDelete }) => {
         scrollToBottom();
     }, [messages]);
 
+    const checkScrollbar = () => {
+        const container = containerRef.current;
+        if (container.scrollHeight > container.clientHeight) {
+            setHasScrollbar(true);
+        } else {
+            setHasScrollbar(false);
+        }
+    };
+
+    useEffect(() => {
+        checkScrollbar();
+        window.addEventListener('resize', checkScrollbar);
+        return () => {
+            window.removeEventListener('resize', checkScrollbar);
+        };
+    }, [messages]);
+
     const handleCopy = useCallback((content, messageId) => {
-        copy(content);
+        const trimmedContent = content.replace(/^\n+/, ''); // 去除开头的空行
+        copy(trimmedContent);
         setCopied(messageId);
         setTimeout(() => {
             setCopied(null);
@@ -48,12 +68,12 @@ const MessageList = ({ messages, onDelete }) => {
         p: ({ node, ...props }) => <p {...props} className="whitespace-pre-wrap text-justify" />,
         code: ({ node, inline, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
-            const content = String(children).replace(/\n$/, '');
+            const content = String(children).replace(/^\n+/, '').replace(/\n+$/, ''); // 去除开头和结尾的空行
             return !inline && match ? (
                 <CodeBlock language={match[1]} value={content} />
             ) : (
                 <code className={`${className} whitespace-pre-wrap break-words`} {...props}>
-                    {children}
+                    {content}
                 </code>
             );
         },
@@ -63,15 +83,18 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     return (
-        <div className="flex-1 overflow-auto p-4">
-            {messages.map((message) => (
-                <div key={message.mid} className="font-light font-serif bg-white shadow-md rounded-lg py-2 px-4 mb-4 relative max-w-screen-lg lg:w-3/5 mx-auto">
+        <div ref={containerRef} className={`flex-1 overflow-auto p-4 ${hasScrollbar ? 'pr-0' : ''}`}>
+            {messages.map((message, index) => (
+                <div
+                    key={message.mid}
+                    className={`font-light font-serif bg-white shadow-md rounded-lg py-2 px-4 relative max-w-screen-md w-full mx-auto ${index !== messages.length - 1 ? 'mb-4' : ''}`}
+                >
                     <div>
                         <strong>{message.role === 'user' ? '你' : 'AI'}:</strong>
                         <ReactMarkdown
                             components={customRenderers}
                             remarkPlugins={[remarkGfm]}
-                            className=" break-words markdown-content whitespace-nowrap"
+                            className="break-words markdown-content whitespace-nowrap"
                         >
                             {message.content}
                         </ReactMarkdown>

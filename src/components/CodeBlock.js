@@ -1,6 +1,6 @@
 import React from 'react';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { HiOutlineDuplicate, HiCheckCircle } from 'react-icons/hi';
 import copy from 'copy-to-clipboard';
 import { useState, useCallback } from 'react';
@@ -19,9 +19,10 @@ const CodeBlock = ({ language, value, messageId }) => {
     return (
         <div className="relative">
             <SyntaxHighlighter
-                style={docco}
+                style={atomOneDark}
                 language={language}
                 PreTag="div"
+                className="text-sm rounded"
             >
                 {value}
             </SyntaxHighlighter>
