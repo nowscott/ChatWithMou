@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import ChatAPI from './components/ChatAPI';
 import InputPrompt from './components/InputPrompt';
 import MessageHistory from './components/MessageHistory';
@@ -11,24 +11,25 @@ const App = () => {
     const [aiMessageMid, setAiMessageMid] = useState(null);
     const [selectedModel, setSelectedModel] = useState(localStorage.getItem('selectedModel') || 'Qwen/Qwen2-7B-Instruct');
 
-    const handleContentUpdate = (newContent) => {
+    const handleContentUpdate = useCallback((newContent) => {
         updateMessage(aiMessageMid, prevMessage => ({
             content: (prevMessage.content || '') + newContent
         }));
-    };
+    }, [aiMessageMid, updateMessage]);
 
-    const handleTokenUpdate = (newTotalTokens) => {
+    const handleTokenUpdate = useCallback((newTotalTokens) => {
         updateMessage(aiMessageMid, {
             totalTokens: newTotalTokens
         });
-    };
+    }, [aiMessageMid, updateMessage]);
 
     const handleSend = (prompt) => {
         addUserMessage(prompt);
-        const newAiMessageMid = addAIMessage();
-        setAiMessageMid(newAiMessageMid);
+        const newAiMessageId = addAIMessage();
+        setAiMessageMid(newAiMessageId);
 
-        const chatHistory = messages.map(msg => `${msg.role === 'user' ? '你' : 'AI'}: ${msg.content}`).join('\n');
+        const formatMessage = (msg) => `${msg.role === 'user' ? '你' : 'AI'}: ${msg.content}`;
+        const chatHistory = messages.map(formatMessage).join('\n');
         const fullPrompt = `${chatHistory}\n你: ${prompt}`;
 
         setSubmittedPrompt(fullPrompt);
@@ -42,8 +43,8 @@ const App = () => {
     return (
         <div className="flex flex-col h-screen overflow-hidden bg-blue-50">
             <NavBar selectedModel={selectedModel} onModelChange={handleModelChange} />
-            <div className="flex-1 overflow-y-auto mt-12 mb-12 flex flex-col-reverse"> {/* 使用 flex-col-reverse 确保消息列表从底部开始 */}
-                <div className="flex flex-col justify-end"> {/* 使用 flex-col 和 justify-end 确保消息出现在底部 */}
+            <div className="flex-1 overflow-y-auto mt-12 mb-12 flex flex-col-reverse"> 
+                <div className="flex flex-col justify-end"> 
                     <MessageList messages={messages} onDelete={deleteMessage} />
                 </div>
             </div>

@@ -1,6 +1,6 @@
 {
   "name": "chatwithqwen",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.1.4",
@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "tailwindcss": "^3.4.4"
   }
 }
