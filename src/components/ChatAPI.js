@@ -23,13 +23,15 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
             body: JSON.stringify({
                 model: modelRef.current,
                 messages: [
-                    { role: 'system', content: `
+                    {
+                        role: 'system', content: `
                     1. 每当用户提供对话记录时，优先使用提供的对话记录进行回答。
                     2. 如果用户询问“我说过什么”或类似问题，检查提供的对话记录，并根据记录内容进行回答。
                     3. 遵循以下格式处理对话记录和记忆查询：
                        - 对话记录处理：当用户提供对话记录时，解析并存储记录内容。
                        - 记忆查询回应：根据提供的对话记录内容进行回答。`
-                    },{role:'system',content:`回复的时候无需带上类似"AI:"的开头`},
+                    },
+                    { role: 'system', content: `回复的时候无需带上类似"AI:"的开头` },
                     { role: 'user', content: prompt }
                 ],
                 max_tokens: 4096,
