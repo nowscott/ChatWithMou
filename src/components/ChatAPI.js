@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
+const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
     useEffect(() => {
         const apiKey = process.env.REACT_APP_API_KEY;
         const options = {
@@ -12,7 +12,16 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
             },
             body: JSON.stringify({
                 model: model,
-                messages: [{ role: 'user', content: prompt }],
+                messages: [
+                    { role: 'system', content: `系统提示词：
+                    1. 每当用户提供对话记录时，优先使用提供的对话记录进行回答。
+                    2. 如果用户询问“我说过什么”或类似问题，检查提供的对话记录，并根据记录内容进行回答。
+                    3. 遵循以下格式处理对话记录和记忆查询：
+                       - 对话记录处理：当用户提供对话记录时，解析并存储记录内容。
+                       - 记忆查询回应：根据提供的对话记录内容进行回答。`
+                    },
+                    { role: 'user', content: prompt }
+                ],
                 max_tokens: 4096,
                 temperature: 0.7,
                 top_p: 0.7,
@@ -30,14 +39,13 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
                 function read() {
                     reader.read().then(({ done, value }) => {
                         if (done) {
-                            // console.log('流式响应已结束');
                             return;
                         }
                         const text = decoder.decode(value, { stream: true });
                         text.split('\n').forEach(line => {
-                            if (line.trim() !== '' && line.trim() !== 'data: [DONE]') {  // 忽略空行和 'data: [DONE]'
+                            if (line.trim() !== '' && line.trim() !== 'data: [DONE]') {
                                 try {
-                                    const jsonResponse = JSON.parse(line.trim().replace(/^data: /, '')); // 移除前缀 'data: '
+                                    const jsonResponse = JSON.parse(line.trim().replace(/^data: /, ''));
                                     const delta = jsonResponse.choices[0].delta;
                                     if (delta && delta.content) {
                                         onContentUpdate(delta.content);
@@ -50,11 +58,9 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
                                 }
                             }
                         });
-
-                        read(); // 继续读取下一个数据块
+                        read(); 
                     });
                 }
-
                 read();
             })
             .catch(err => console.error('请求失败:', err));
@@ -62,5 +68,4 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model}) => {
 
     return null;
 };
-
 export default ChatAPI;

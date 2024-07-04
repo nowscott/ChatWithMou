@@ -33,7 +33,7 @@ const MessageHistory = () => {
             type: 'prompt',
             content: prompt,
             timestamp: new Date().toISOString(),
-            totalTokens: null // 初始值为null，稍后更新
+            totalTokens: null
         });
         return userMessageMid;
     };
@@ -46,7 +46,7 @@ const MessageHistory = () => {
             type: 'response',
             content: '',
             timestamp: new Date().toISOString(),
-            totalTokens: null // 初始值为null，稍后更新
+            totalTokens: null
         });
         return aiMessageMid;
     };
