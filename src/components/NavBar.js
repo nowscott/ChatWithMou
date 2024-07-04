@@ -31,7 +31,7 @@ const NavBar = ({ selectedModel, onModelChange }) => {
 
     return (
         <div className="bg-blue-300 text-white p-2 px-4 flex justify-between items-center fixed top-0 left-0 right-0 z-10">
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-nowrap text-2xl font-bold">
                 <span className="hidden sm:inline">Chat With </span>
                 {title}
             </h1>
