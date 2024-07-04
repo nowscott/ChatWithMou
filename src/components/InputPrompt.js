@@ -45,35 +45,37 @@ const InputPrompt = ({ onSend, onClear }) => {
     }, [prompt]);
 
     return (
-        <div className="w-full p-2 px-4 bg-white rounded flex items-center max-w-screen-lg lg:w-3/5 mx-auto"> {/* 使用 Tailwind CSS 类 */}
-            <div className="flex flex-grow items-center border rounded border-gray-300 bg-white">
-                <button
-                    className="p-1 text-red-500"
-                    onClick={handleClear}
-                >
-                    <HiOutlineTrash className="h-6 w-6" />
-                </button>
-                <textarea
-                    className="text-sm font-serif w-full px-2 py-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words"
-                    style={{ maxHeight: '10rem', minHeight: '1rem' }}
-                    rows="1"
-                    value={prompt}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    onInput={(e) => {
-                        e.target.style.height = 'auto';
-                        e.target.style.height = `${e.target.scrollHeight}px`;
-                    }}
-                    onCompositionStart={handleCompositionStart}
-                    onCompositionEnd={handleCompositionEnd}
-                    placeholder="输入你的提示词"
-                />
-                <button
-                    className="p-1 text-blue-500"
-                    onClick={handleSend}
-                >
-                    <HiOutlineAnnotation className="h-6 w-6" />
-                </button>
+        <div className="flex-0 bottom-0 w-full bg-blue-300 py-2 px-4 border-t border-white">
+            <div className="p-2 px-4 bg-white rounded flex items-center relative max-w-screen-md w-full mx-auto"> {/* 使用 Tailwind CSS 类 */}
+                <div className="flex flex-grow items-center border rounded border-gray-300 bg-white">
+                    <button
+                        className="p-1 text-red-500"
+                        onClick={handleClear}
+                    >
+                        <HiOutlineTrash className="h-6 w-6" />
+                    </button>
+                    <textarea
+                        className="text-sm font-serif w-full px-2 py-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words"
+                        style={{ maxHeight: '10rem', minHeight: '1rem' }}
+                        rows="1"
+                        value={prompt}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                        onInput={(e) => {
+                            e.target.style.height = 'auto';
+                            e.target.style.height = `${e.target.scrollHeight}px`;
+                        }}
+                        onCompositionStart={handleCompositionStart}
+                        onCompositionEnd={handleCompositionEnd}
+                        placeholder="输入你的提示词"
+                    />
+                    <button
+                        className="p-1 text-blue-500"
+                        onClick={handleSend}
+                    >
+                        <HiOutlineAnnotation className="h-6 w-6" />
+                    </button>
+                </div>
             </div>
         </div>
     );

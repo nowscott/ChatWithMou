@@ -41,16 +41,10 @@ const App = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-blue-50">
+        <div className="flex flex-col h-screen justify-between overflow-hidden bg-blue-50">
             <NavBar selectedModel={selectedModel} onModelChange={handleModelChange} />
-            <div className="flex-1 overflow-y-auto mt-12 mb-12 flex flex-col-reverse"> 
-                <div className="flex flex-col justify-end"> 
-                    <MessageList messages={messages} onDelete={deleteMessage} />
-                </div>
-            </div>
-            <div className="fixed bottom-0 w-full bg-blue-300 py-2 px-4 border-t border-white">
-                <InputPrompt onSend={handleSend} onClear={clearMessages} />
-            </div>
+            <MessageList messages={messages} onDelete={deleteMessage} />
+            <InputPrompt onSend={handleSend} onClear={clearMessages} />
             {submittedPrompt && (
                 <ChatAPI
                     prompt={submittedPrompt}
