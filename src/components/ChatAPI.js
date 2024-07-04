@@ -31,7 +31,7 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
                        - 对话记录处理：当用户提供对话记录时，解析并存储记录内容。
                        - 记忆查询回应：根据提供的对话记录内容进行回答。`
                     },
-                    { role: 'system', content: `回复的时候无需带上类似"AI:"的开头` },
+                    { role: 'system', content: `回复的时候无需带上类似“AI:”的开头` },
                     { role: 'user', content: prompt }
                 ],
                 max_tokens: 4096,
