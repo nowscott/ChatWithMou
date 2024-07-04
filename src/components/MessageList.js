@@ -59,7 +59,7 @@ const MessageList = ({ messages, onDelete }) => {
         },
         ol: ({ node, ...props }) => <ol {...props} className="list-decimal ml-6" />,
         ul: ({ node, ...props }) => <ul {...props} className="list-disc ml-6" />,
-        li: ({ node, ...props }) => <li {...props} className="whitespace-nowrap " />
+        li: ({ node, ...props }) => <li {...props} className="whitespace-normal break-words" />
     };
 
     return (
