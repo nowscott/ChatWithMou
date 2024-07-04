@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
 import { HiOutlineTrash, HiOutlineDuplicate, HiCheckCircle, HiExclamation } from 'react-icons/hi';
 import CodeBlock from './CodeBlock';
 import copy from 'copy-to-clipboard';
@@ -46,7 +45,7 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     const customRenderers = {
-        p: ({ node, ...props }) => <p {...props} />,
+        p: ({ node, ...props }) => <p {...props} className="whitespace-pre-wrap text-justify" />,
         code: ({ node, inline, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const content = String(children).replace(/\n$/, '');
@@ -57,19 +56,22 @@ const MessageList = ({ messages, onDelete }) => {
                     {children}
                 </code>
             );
-        }
+        },
+        ol: ({ node, ...props }) => <ol {...props} className="list-decimal ml-6" />,
+        ul: ({ node, ...props }) => <ul {...props} className="list-disc ml-6" />,
+        li: ({ node, ...props }) => <li {...props} className="whitespace-nowrap " />
     };
 
     return (
         <div className="flex-1 overflow-auto p-4">
             {messages.map((message) => (
-                <div key={message.mid} className="bg-white shadow-md rounded-lg px-4 mb-4 relative max-w-screen-lg lg:w-3/5 mx-auto">
+                <div key={message.mid} className="font-light font-serif bg-white shadow-md rounded-lg py-2 px-4 mb-4 relative max-w-screen-lg lg:w-3/5 mx-auto">
                     <div>
                         <strong>{message.role === 'user' ? '你' : 'AI'}:</strong>
-                        <ReactMarkdown 
-                            components={customRenderers} 
-                            remarkPlugins={[remarkGfm, remarkBreaks]}
-                            className="whitespace-pre-wrap break-words"
+                        <ReactMarkdown
+                            components={customRenderers}
+                            remarkPlugins={[remarkGfm]}
+                            className=" break-words markdown-content whitespace-nowrap"
                         >
                             {message.content}
                         </ReactMarkdown>
