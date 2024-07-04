@@ -1,6 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
+    const stableOnContentUpdate = useRef(onContentUpdate);
+    const stableOnTokenUpdate = useRef(onTokenUpdate);
+    const modelRef = useRef(model);
+
+    useEffect(() => {
+        stableOnContentUpdate.current = onContentUpdate;
+        stableOnTokenUpdate.current = onTokenUpdate;
+        modelRef.current = model;
+    }, [onContentUpdate, onTokenUpdate, model]);
+
     useEffect(() => {
         const apiKey = process.env.REACT_APP_API_KEY;
         const options = {
@@ -11,7 +21,7 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
                 authorization: `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: model,
+                model: modelRef.current,
                 messages: [
                     { role: 'system', content: `系统提示词：
                     1. 每当用户提供对话记录时，优先使用提供的对话记录进行回答。
@@ -48,19 +58,21 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
                                     const jsonResponse = JSON.parse(line.trim().replace(/^data: /, ''));
                                     const delta = jsonResponse.choices[0].delta;
                                     if (delta && delta.content) {
-                                        onContentUpdate(delta.content);
+                                        stableOnContentUpdate.current(delta.content);
                                     }
                                     if (jsonResponse.usage && jsonResponse.usage.total_tokens) {
-                                        onTokenUpdate(jsonResponse.usage.total_tokens);
+                                        stableOnTokenUpdate.current(jsonResponse.usage.total_tokens);
                                     }
                                 } catch (error) {
                                     console.error('解析 JSON 时出错:', error, '行:', line);
                                 }
                             }
                         });
-                        read(); 
+
+                        read();
                     });
                 }
+
                 read();
             })
             .catch(err => console.error('请求失败:', err));
@@ -68,4 +80,5 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
 
     return null;
 };
+
 export default ChatAPI;

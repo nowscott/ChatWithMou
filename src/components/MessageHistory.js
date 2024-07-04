@@ -1,31 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const MessageHistory = () => {
     const [messages, setMessages] = useState([]);
 
+    // 加载初始消息
     useEffect(() => {
         const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
         setMessages(savedMessages);
     }, []);
 
+    // 保存消息到 localStorage
     useEffect(() => {
         localStorage.setItem('messages', JSON.stringify(messages));
     }, [messages]);
 
-    const addMessage = (message) => {
+    const addMessage = useCallback((message) => {
         setMessages(prevMessages => [...prevMessages, message]);
-    };
+    }, []);
 
-    const updateMessage = (mid, update) => {
+    const updateMessage = useCallback((mid, update) => {
         setMessages(prevMessages => 
             prevMessages.map(msg => 
                 msg.mid === mid ? { ...msg, ...(typeof update === 'function' ? update(msg) : update) } : msg
             )
         );
-    };
+    }, []);
 
-    const addUserMessage = (prompt) => {
+    const addUserMessage = useCallback((prompt) => {
         const userMessageMid = uuidv4();
         addMessage({
             mid: userMessageMid,
@@ -36,9 +38,9 @@ const MessageHistory = () => {
             totalTokens: null
         });
         return userMessageMid;
-    };
+    }, [addMessage]);
 
-    const addAIMessage = () => {
+    const addAIMessage = useCallback(() => {
         const aiMessageMid = uuidv4();
         addMessage({
             mid: aiMessageMid,
@@ -49,16 +51,16 @@ const MessageHistory = () => {
             totalTokens: null
         });
         return aiMessageMid;
-    };
+    }, [addMessage]);
 
-    const clearMessages = () => {
+    const clearMessages = useCallback(() => {
         localStorage.removeItem('messages');
         setMessages([]);
-    };
+    }, []);
 
-    const deleteMessage = (mid) => {
+    const deleteMessage = useCallback((mid) => {
         setMessages(prevMessages => prevMessages.filter(msg => msg.mid !== mid));
-    };
+    }, []);
 
     return { messages, addMessage, updateMessage, addUserMessage, addAIMessage, clearMessages, deleteMessage };
 };

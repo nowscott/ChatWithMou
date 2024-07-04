@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import ChatAPI from './components/ChatAPI';
 import InputPrompt from './components/InputPrompt';
 import MessageHistory from './components/MessageHistory';
@@ -11,27 +11,27 @@ const App = () => {
     const [aiMessageMid, setAiMessageMid] = useState(null);
     const [selectedModel, setSelectedModel] = useState(localStorage.getItem('selectedModel') || 'Qwen/Qwen2-7B-Instruct');
 
-    const handleContentUpdate = (newContent) => {
+    const handleContentUpdate = useCallback((newContent) => {
         updateMessage(aiMessageMid, prevMessage => ({
             content: (prevMessage.content || '') + newContent
         }));
-    };
+    }, [aiMessageMid, updateMessage]);
 
-    const handleTokenUpdate = (newTotalTokens) => {
+    const handleTokenUpdate = useCallback((newTotalTokens) => {
         updateMessage(aiMessageMid, {
             totalTokens: newTotalTokens
         });
-    };
+    }, [aiMessageMid, updateMessage]);
 
     const handleSend = (prompt) => {
         addUserMessage(prompt);
         const newAiMessageId = addAIMessage();
         setAiMessageMid(newAiMessageId);
-    
+
         const formatMessage = (msg) => `${msg.role === 'user' ? '你' : 'AI'}: ${msg.content}`;
         const chatHistory = messages.map(formatMessage).join('\n');
         const fullPrompt = `${chatHistory}\n你: ${prompt}`;
-    
+
         setSubmittedPrompt(fullPrompt);
     };
 
