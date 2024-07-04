@@ -8,8 +8,10 @@ import copy from 'copy-to-clipboard';
 
 const MessageList = ({ messages, onDelete }) => {
     const messageEndRef = useRef(null);
+    const containerRef = useRef(null);
     const [copied, setCopied] = useState(null);
     const [pendingDelete, setPendingDelete] = useState({});
+    const [hasScrollbar, setHasScrollbar] = useState(false);
 
     const scrollToBottom = () => {
         if (messageEndRef.current) {
@@ -19,6 +21,23 @@ const MessageList = ({ messages, onDelete }) => {
 
     useEffect(() => {
         scrollToBottom();
+    }, [messages]);
+
+    const checkScrollbar = () => {
+        const container = containerRef.current;
+        if (container.scrollHeight > container.clientHeight) {
+            setHasScrollbar(true);
+        } else {
+            setHasScrollbar(false);
+        }
+    };
+
+    useEffect(() => {
+        checkScrollbar();
+        window.addEventListener('resize', checkScrollbar);
+        return () => {
+            window.removeEventListener('resize', checkScrollbar);
+        };
     }, [messages]);
 
     const handleCopy = useCallback((content, messageId) => {
@@ -64,12 +83,11 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     return (
-        <div className="flex-1 overflow-auto p-4 pr-0">
+        <div ref={containerRef} className={`flex-1 overflow-auto p-4 ${hasScrollbar ? 'pr-0' : ''}`}>
             {messages.map((message, index) => (
                 <div
                     key={message.mid}
-                    className={`font-light font-serif bg-white shadow-md rounded-lg py-2 px-4 relative max-w-screen-md w-full mx-auto ${index !== messages.length - 1 ? 'mb-4' : ''
-                        }`}
+                    className={`font-light font-serif bg-white shadow-md rounded-lg py-2 px-4 relative max-w-screen-md w-full mx-auto ${index !== messages.length - 1 ? 'mb-4' : ''}`}
                 >
                     <div>
                         <strong>{message.role === 'user' ? '你' : 'AI'}:</strong>
