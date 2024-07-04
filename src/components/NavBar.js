@@ -32,13 +32,13 @@ const NavBar = ({ selectedModel, onModelChange, targetRef }) => {
 
     return (
         <div className='flex-0'>
-            <div className="flex bg-blue-300 text-white p-2 px-4 justify-between items-center top-0 left-0 right-0">
+            <div className="flex bg-blue-300 text-white p-2 justify-between items-center top-0 left-0 right-0">
                 <h1 className="text-nowrap font-serif text-2xl font-bold">
                     <span className="hidden sm:inline">Chat With </span>
                     {title}
                 </h1>
                 <select
-                    className="bg-white font-serif text-black p-2 rounded"
+                    className="bg-white font-serif text-sm text-black p-1 rounded"
                     value={selectedModel}
                     onChange={(event) => onModelChange(event.target.value)}
                 >
