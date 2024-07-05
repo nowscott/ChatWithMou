@@ -1,24 +1,37 @@
 import { useEffect, useRef } from 'react';
 
-const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
+const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, topP, topK, frequencyPenalty }) => {
     const stableOnContentUpdate = useRef(onContentUpdate);
     const stableOnTokenUpdate = useRef(onTokenUpdate);
     const modelRef = useRef(model);
+    const apiKeyRef = useRef(apiKey);
+    const maxTokensRef = useRef(maxTokens);
+    const temperatureRef = useRef(temperature);
+    const topPRef = useRef(topP);
+    const topKRef = useRef(topK);
+    const frequencyPenaltyRef = useRef(frequencyPenalty);
+    const envapikey = process.env.REACT_APP_API_KEY
 
     useEffect(() => {
         stableOnContentUpdate.current = onContentUpdate;
         stableOnTokenUpdate.current = onTokenUpdate;
         modelRef.current = model;
-    }, [onContentUpdate, onTokenUpdate, model]);
+        apiKeyRef.current = apiKey;
+        maxTokensRef.current = maxTokens;
+        temperatureRef.current = temperature;
+        topPRef.current = topP;
+        topKRef.current = topK;
+        frequencyPenaltyRef.current = frequencyPenalty;
+    }, [onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, topP, topK, frequencyPenalty]);
 
     useEffect(() => {
-        const apiKey = process.env.REACT_APP_API_KEY;
+        if (!prompt) return;
         const options = {
             method: 'POST',
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authorization: `Bearer ${apiKey}`
+                authorization: `Bearer ${envapikey}`
             },
             body: JSON.stringify({
                 model: modelRef.current,
@@ -34,11 +47,11 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model }) => {
                     { role: 'system', content: '回复的时候无需带上类似“AI:”的开头' },
                     { role: 'user', content: prompt }
                 ],
-                max_tokens: 4096,
-                temperature: 0.7,
-                top_p: 0.7,
-                top_k: 50,
-                frequency_penalty: 0.5,
+                max_tokens: maxTokensRef.current,
+                temperature: temperatureRef.current,
+                top_p: topPRef.current,
+                top_k: topKRef.current,
+                frequency_penalty: frequencyPenaltyRef.current,
                 stream: true
             })
         };
