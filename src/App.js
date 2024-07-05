@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import ChatAPI from './components/ChatAPI';
 import InputPrompt from './components/InputPrompt';
 import MessageHistory from './components/MessageHistory';
@@ -14,6 +14,7 @@ const App = () => {
         const savedSettings = JSON.parse(localStorage.getItem('settings')) || {};
         return {
             apiKey: savedSettings.apiKey || '',
+            systemPrompt:savedSettings.systemPrompt|| '',
             maxTokens: savedSettings.maxTokens || 4096,
             temperature: savedSettings.temperature || 0.7,
             topP: savedSettings.topP || 0.7,
@@ -64,6 +65,7 @@ const App = () => {
             {submittedPrompt && (
                 <ChatAPI
                     prompt={submittedPrompt}
+                    systemPrompt={settings.systemPrompt}
                     onContentUpdate={handleContentUpdate}
                     onTokenUpdate={handleTokenUpdate}
                     model={settings.model}
