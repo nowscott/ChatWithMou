@@ -1,6 +1,6 @@
 {
   "name": "chatwithqwen",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.1.4",
