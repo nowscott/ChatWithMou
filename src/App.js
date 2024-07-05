@@ -1,15 +1,28 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ChatAPI from './components/ChatAPI';
 import InputPrompt from './components/InputPrompt';
 import MessageHistory from './components/MessageHistory';
 import MessageList from './components/MessageList';
 import NavBar from './components/NavBar';
+import SettingsModal from './components/SettingsModal';
 
 const App = () => {
     const { messages, addUserMessage, addAIMessage, updateMessage, clearMessages, deleteMessage } = MessageHistory();
     const [submittedPrompt, setSubmittedPrompt] = useState('');
     const [aiMessageMid, setAiMessageMid] = useState(null);
-    const [selectedModel, setSelectedModel] = useState(localStorage.getItem('selectedModel') || 'Qwen/Qwen2-7B-Instruct');
+    const [settings, setSettings] = useState(() => {
+        const savedSettings = JSON.parse(localStorage.getItem('settings')) || {};
+        return {
+            apiKey: savedSettings.apiKey || '',
+            maxTokens: savedSettings.maxTokens || 4096,
+            temperature: savedSettings.temperature || 0.7,
+            topP: savedSettings.topP || 0.7,
+            topK: savedSettings.topK || 50,
+            frequencyPenalty: savedSettings.frequencyPenalty || 0.5,
+            model: savedSettings.model || 'Qwen/Qwen2-7B-Instruct'
+        };
+    });
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     const handleContentUpdate = useCallback((newContent) => {
         updateMessage(aiMessageMid, prevMessage => ({
@@ -35,14 +48,17 @@ const App = () => {
         setSubmittedPrompt(fullPrompt);
     };
 
-    const handleModelChange = (model) => {
-        setSelectedModel(model);
-        localStorage.setItem('selectedModel', model);
+    const handleSettingsClick = () => {
+        setIsSettingsOpen(true);
+    };
+
+    const handleCloseSettings = () => {
+        setIsSettingsOpen(false);
     };
 
     return (
         <div className="flex flex-col h-screen justify-between overflow-hidden bg-blue-50">
-            <NavBar selectedModel={selectedModel} onModelChange={handleModelChange} />
+            <NavBar onSettingsClick={handleSettingsClick} />
             <MessageList messages={messages} onDelete={deleteMessage} />
             <InputPrompt onSend={handleSend} onClear={clearMessages} />
             {submittedPrompt && (
@@ -50,9 +66,21 @@ const App = () => {
                     prompt={submittedPrompt}
                     onContentUpdate={handleContentUpdate}
                     onTokenUpdate={handleTokenUpdate}
-                    model={selectedModel}
+                    model={settings.model}
+                    apiKey={settings.apiKey}
+                    maxTokens={settings.maxTokens}
+                    temperature={settings.temperature}
+                    topP={settings.topP}
+                    topK={settings.topK}
+                    frequencyPenalty={settings.frequencyPenalty}
                 />
             )}
+            <SettingsModal
+                isOpen={isSettingsOpen}
+                onRequestClose={handleCloseSettings}
+                settings={settings}
+                onSettingsChange={setSettings}
+            />
         </div>
     );
 };

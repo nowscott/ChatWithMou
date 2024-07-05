@@ -11,7 +11,6 @@ const MessageList = ({ messages, onDelete }) => {
     const containerRef = useRef(null);
     const [copied, setCopied] = useState(null);
     const [pendingDelete, setPendingDelete] = useState({});
-    const [hasScrollbar, setHasScrollbar] = useState(false);
 
     const scrollToBottom = () => {
         if (messageEndRef.current) {
@@ -21,23 +20,6 @@ const MessageList = ({ messages, onDelete }) => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
-
-    const checkScrollbar = () => {
-        const container = containerRef.current;
-        if (container.scrollHeight > container.clientHeight) {
-            setHasScrollbar(true);
-        } else {
-            setHasScrollbar(false);
-        }
-    };
-
-    useEffect(() => {
-        checkScrollbar();
-        window.addEventListener('resize', checkScrollbar);
-        return () => {
-            window.removeEventListener('resize', checkScrollbar);
-        };
     }, [messages]);
 
     const handleCopy = useCallback((content, messageId) => {
@@ -83,7 +65,7 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     return (
-        <div ref={containerRef} className={`flex-1 overflow-auto p-4 ${hasScrollbar ? 'pr-0' : ''}`}>
+        <div ref={containerRef} className='flex-1 overflow-auto p-4'>
             {messages.map((message, index) => (
                 <div
                     key={message.mid}
