@@ -1,6 +1,13 @@
 import { useEffect, useRef } from 'react';
 
-const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, topP, topK, frequencyPenalty }) => {
+let systemPrompt0 = `
+1. 每当用户提供对话记录时，优先使用提供的对话记录进行回答。
+2. 如果用户询问“我说过什么”或类似问题，检查提供的对话记录，并根据记录内容进行回答。
+3. 不需要提供类似“AI:”的前缀！！！
+`;
+
+const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, onCompletion, model, apiKey, maxTokens, temperature, 
+    topP, topK, frequencyPenalty, systemPrompt }) => {
     const stableOnContentUpdate = useRef(onContentUpdate);
     const stableOnTokenUpdate = useRef(onTokenUpdate);
     const modelRef = useRef(model);
@@ -10,7 +17,9 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
     const topPRef = useRef(topP);
     const topKRef = useRef(topK);
     const frequencyPenaltyRef = useRef(frequencyPenalty);
-    const envapikey = process.env.REACT_APP_API_KEY
+    const systemPromptRef = useRef(systemPrompt);
+    const envapikeyRef = useRef(process.env.REACT_APP_API_KEY);
+    const isCompleteRef = useRef(false);
 
     useEffect(() => {
         stableOnContentUpdate.current = onContentUpdate;
@@ -22,29 +31,24 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
         topPRef.current = topP;
         topKRef.current = topK;
         frequencyPenaltyRef.current = frequencyPenalty;
-    }, [onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, topP, topK, frequencyPenalty]);
+        systemPromptRef.current = systemPrompt;
+    }, [onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, topP, topK, frequencyPenalty, systemPrompt]);
 
     useEffect(() => {
         if (!prompt) return;
+        isCompleteRef.current = false;
         const options = {
             method: 'POST',
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authorization: `Bearer ${envapikey}`
+                authorization: `Bearer ${envapikeyRef.current}`
             },
             body: JSON.stringify({
                 model: modelRef.current,
                 messages: [
-                    {
-                        role: 'system', content: `
-                    1. 每当用户提供对话记录时，优先使用提供的对话记录进行回答。
-                    2. 如果用户询问“我说过什么”或类似问题，检查提供的对话记录，并根据记录内容进行回答。
-                    3. 遵循以下格式处理对话记录和记忆查询：
-                       - 对话记录处理：当用户提供对话记录时，解析并存储记录内容。
-                       - 记忆查询回应：根据提供的对话记录内容进行回答。`
-                    },
-                    { role: 'system', content: '回复的时候无需带上类似“AI:”的开头' },
+                    { role: 'system', content: systemPrompt0 },
+                    { role: 'system', content: systemPromptRef.current },
                     { role: 'user', content: prompt }
                 ],
                 max_tokens: maxTokensRef.current,
@@ -60,10 +64,11 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
             .then(response => {
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder('utf-8');
-
                 function read() {
                     reader.read().then(({ done, value }) => {
                         if (done) {
+                            isCompleteRef.current = true;
+                            onCompletion();
                             return;
                         }
                         const text = decoder.decode(value, { stream: true });
@@ -83,16 +88,14 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
                                 }
                             }
                         });
-
                         read();
                     });
                 }
-
                 read();
             })
             .catch(err => console.error('请求失败:', err));
-    }, [prompt]);
-
+    }, [prompt, onCompletion]);
+    
     return null;
 };
 

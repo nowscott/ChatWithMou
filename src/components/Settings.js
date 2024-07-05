@@ -12,6 +12,7 @@ const models = [
 
 const settingsConfig = [
     { label: '模型', type: 'select', stateKey: 'model' },
+    { label: '系统提示词', type: 'text', stateKey: 'systemPrompt' },
     { label: 'API 密钥', type: 'password', stateKey: 'apiKey' },
     { label: '最大 Tokens', type: 'range', min: 1, max: 4096, stateKey: 'maxTokens' },
     { label: '温度', type: 'range', min: 0, max: 1, step: 0.1, stateKey: 'temperature' },
@@ -31,7 +32,7 @@ const Settings = ({ settings, onSettingsChange }) => {
     };
 
     return (
-        <div>
+        <div className='font-serif'>
             <h1 className="text-2xl font-bold mb-4">设置界面</h1>
             {settingsConfig.map(setting => {
                 if (setting.type === 'select') {
