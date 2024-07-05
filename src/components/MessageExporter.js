@@ -23,7 +23,6 @@ const MessageExporter = () => {
     const { messages } = MessageHistory();
     const handleExport = () => {
         const date = moment().format('YYYY-MM-DD_HH-mm-ss');
-        console.log(date);
         const title = `chat-history-${date}`;
         const md = convertMessagesToMarkdown(messages, title);
         const filename = `${title}.md`;
