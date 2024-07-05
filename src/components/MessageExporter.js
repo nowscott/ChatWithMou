@@ -8,7 +8,7 @@ const convertMessagesToMarkdown = (messages, title) => {
     const header = `# ${title}\n\n`;
     const body = messages.map(message => {
         const role = message.role === 'user' ? '用户' : 'AI';
-        const date = moment(message.timestamp).format('YYYY-MM-DD_HH:mm:ss');
+        const date = moment(message.timestamp).format('YYYY-MM-DD_HH-mm-ss');
         return `### ${role}\n\n${message.content}\n\n*时间: ${date}*\n`;
     }).join('\n');
     return header + body;
@@ -21,9 +21,9 @@ const exportMarkdown = (markdown, filename) => {
 
 const MessageExporter = () => {
     const { messages } = MessageHistory();
-
     const handleExport = () => {
         const date = moment().format('YYYY-MM-DD_HH-mm-ss');
+        console.log(date);
         const title = `chat-history-${date}`;
         const md = convertMessagesToMarkdown(messages, title);
         const filename = `${title}.md`;

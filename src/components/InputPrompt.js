@@ -46,7 +46,7 @@ const InputPrompt = ({ onSend, onClear }) => {
 
     return (
         <div className="flex-0 bottom-0 w-full bg-blue-300 py-2 px-4 border-t border-white">
-            <div className="p-2 px-4 bg-white rounded flex items-center relative max-w-screen-md w-full mx-auto"> {/* 使用 Tailwind CSS 类 */}
+            <div className="p-2 px-4 bg-white rounded flex items-center relative max-w-screen-md w-full mx-auto">
                 <div className="flex flex-grow items-center border rounded border-gray-300 bg-white">
                     <button
                         className="p-1 text-red-500"
