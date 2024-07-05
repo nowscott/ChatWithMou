@@ -6,7 +6,7 @@ let systemPrompt0 = `
 3. 不需要提供类似“AI:”的前缀！！！
 `;
 
-const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, 
+const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, onCompletion, model, apiKey, maxTokens, temperature, 
     topP, topK, frequencyPenalty, systemPrompt }) => {
     const stableOnContentUpdate = useRef(onContentUpdate);
     const stableOnTokenUpdate = useRef(onTokenUpdate);
@@ -19,6 +19,7 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
     const frequencyPenaltyRef = useRef(frequencyPenalty);
     const systemPromptRef = useRef(systemPrompt);
     const envapikeyRef = useRef(process.env.REACT_APP_API_KEY);
+    const isCompleteRef = useRef(false);
 
     useEffect(() => {
         stableOnContentUpdate.current = onContentUpdate;
@@ -31,11 +32,11 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
         topKRef.current = topK;
         frequencyPenaltyRef.current = frequencyPenalty;
         systemPromptRef.current = systemPrompt;
-    }, [onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, 
-        topP, topK, frequencyPenalty, systemPrompt]);
+    }, [onContentUpdate, onTokenUpdate, model, apiKey, maxTokens, temperature, topP, topK, frequencyPenalty, systemPrompt]);
 
     useEffect(() => {
         if (!prompt) return;
+        isCompleteRef.current = false;
         const options = {
             method: 'POST',
             headers: {
@@ -63,10 +64,11 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
             .then(response => {
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder('utf-8');
-
                 function read() {
                     reader.read().then(({ done, value }) => {
                         if (done) {
+                            isCompleteRef.current = true;
+                            onCompletion();
                             return;
                         }
                         const text = decoder.decode(value, { stream: true });
@@ -92,7 +94,8 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, model, apiKey, maxTok
                 read();
             })
             .catch(err => console.error('请求失败:', err));
-    }, [prompt]);
+    }, [prompt, onCompletion]);
+    
     return null;
 };
 

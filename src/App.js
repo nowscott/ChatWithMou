@@ -14,7 +14,7 @@ const App = () => {
         const savedSettings = JSON.parse(localStorage.getItem('settings')) || {};
         return {
             apiKey: savedSettings.apiKey || '',
-            systemPrompt:savedSettings.systemPrompt|| '',
+            systemPrompt: savedSettings.systemPrompt || '',
             maxTokens: savedSettings.maxTokens || 4096,
             temperature: savedSettings.temperature || 0.7,
             topP: savedSettings.topP || 0.7,
@@ -24,28 +24,32 @@ const App = () => {
         };
     });
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isMessageComplete, setIsMessageComplete] = useState(false);
 
     const handleContentUpdate = useCallback((newContent) => {
-        updateMessage(aiMessageMid, prevMessage => ({
-            content: (prevMessage.content || '') + newContent
-        }));
-    }, [aiMessageMid, updateMessage]);
+        if (!isMessageComplete) {
+            updateMessage(aiMessageMid, prevMessage => ({
+                content: (prevMessage.content || '') + newContent
+            }));
+        }
+    }, [aiMessageMid, updateMessage, isMessageComplete]);
 
     const handleTokenUpdate = useCallback((newTotalTokens) => {
-        updateMessage(aiMessageMid, {
-            totalTokens: newTotalTokens
-        });
-    }, [aiMessageMid, updateMessage]);
+        if (!isMessageComplete) {
+            updateMessage(aiMessageMid, {
+                totalTokens: newTotalTokens
+            });
+        }
+    }, [aiMessageMid, updateMessage, isMessageComplete]);
 
     const handleSend = (prompt) => {
         addUserMessage(prompt);
         const newAiMessageId = addAIMessage();
         setAiMessageMid(newAiMessageId);
-
         const formatMessage = (msg) => `${msg.role === 'user' ? '你' : 'AI'}: ${msg.content}`;
         const chatHistory = messages.map(formatMessage).join('\n');
         const fullPrompt = `${chatHistory}\n你: ${prompt}`;
-
+        setIsMessageComplete(false);
         setSubmittedPrompt(fullPrompt);
     };
 
@@ -56,6 +60,10 @@ const App = () => {
     const handleCloseSettings = () => {
         setIsSettingsOpen(false);
     };
+
+    const handleCompletion = useCallback(() => {
+        setIsMessageComplete(true);
+    }, []);
 
     return (
         <div className="flex flex-col h-screen justify-between overflow-hidden bg-blue-50">
@@ -75,6 +83,7 @@ const App = () => {
                     topP={settings.topP}
                     topK={settings.topK}
                     frequencyPenalty={settings.frequencyPenalty}
+                    onCompletion={handleCompletion}
                 />
             )}
             <SettingsModal
