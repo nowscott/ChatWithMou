@@ -27,10 +27,10 @@ const CodeBlock = ({ language, value, messageId }) => {
                 {value}
             </SyntaxHighlighter>
             <button
-                className="absolute top-2 right-2 text-xs text-blue-500"
+                className="absolute top-2 right-2 text-xs text-sky-500"
                 onClick={handleCopy}
             >
-                {copied === messageId ? <HiCheckCircle className="h-4 w-4 text-green-500" /> : <HiOutlineDuplicate className="h-4 w-4" />}
+                {copied === messageId ? <HiCheckCircle className="h-4 w-4 text-lime-500" /> : <HiOutlineDuplicate className="h-4 w-4" />}
             </button>
         </div>
     );

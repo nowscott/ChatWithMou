@@ -15,8 +15,8 @@ const TestAPIKey = ({ triggerTest }) => {
         topK: 50,
         frequencyPenalty: 1,
         systemPrompt: '',
-        onContentUpdate: () => {},
-        onTokenUpdate: () => {},
+        onContentUpdate: () => { },
+        onTokenUpdate: () => { },
         onCompletion: () => setIsValid(true),
         onError: () => setIsValid(false) // 处理错误，设置为无效
     });
@@ -31,7 +31,7 @@ const TestAPIKey = ({ triggerTest }) => {
     return (
         <div className="mt-4">
             {isValid === null && <p>尚未测试</p>}
-            {isValid === true && <FaCheckCircle color="green" size="2em" />}
+            {isValid === true && <FaCheckCircle color="lime" size="2em" />}
             {isValid === false && <FaTimesCircle color="red" size="2em" />}
         </div>
     );
