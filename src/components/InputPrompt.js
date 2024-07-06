@@ -45,17 +45,17 @@ const InputPrompt = ({ onSend, onClear }) => {
     }, [prompt]);
 
     return (
-        <div className="flex-0 bottom-0 w-full bg-blue-300 py-2 px-4 border-t border-white">
-            <div className="p-2 px-4 bg-white rounded flex items-center relative max-w-screen-md w-full mx-auto">
-                <div className="flex flex-grow items-center border rounded border-gray-300 bg-white">
+        <div className="flex-0 w-full bg-slate-400 p-2">
+            <div className="p-2 bg-white rounded-lg flex items-center relative max-w-screen-md w-full mx-auto">
+                <div className="flex flex-grow items-center border-2 rounded border-slate-300 bg-stone-50">
                     <button
-                        className="p-1 text-red-500"
+                        className="p-1 text-violet-400"
                         onClick={handleClear}
                     >
                         <HiOutlineTrash className="h-6 w-6" />
                     </button>
                     <textarea
-                        className="text-sm font-serif w-full px-2 py-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words"
+                        className="bg-stone-50 font-serif w-full p-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words"
                         style={{ maxHeight: '10rem', minHeight: '1rem' }}
                         rows="1"
                         value={prompt}
@@ -67,10 +67,10 @@ const InputPrompt = ({ onSend, onClear }) => {
                         }}
                         onCompositionStart={handleCompositionStart}
                         onCompositionEnd={handleCompositionEnd}
-                        placeholder="输入你的提示词"
+                        placeholder="输入你的提示词..."
                     />
                     <button
-                        className="p-1 text-blue-500"
+                        className="p-1 text-slate-500"
                         onClick={handleSend}
                     >
                         <HiOutlineAnnotation className="h-6 w-6" />

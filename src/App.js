@@ -66,7 +66,7 @@ const App = () => {
     }, []);
 
     return (
-        <div className="flex flex-col h-svh justify-between overflow-hidden bg-blue-50">
+        <div className="flex flex-col h-svh justify-between overflow-hidden bg-stone-200">
             <NavBar onSettingsClick={handleSettingsClick} />
             <MessageList messages={messages} onDelete={deleteMessage} />
             <InputPrompt onSend={handleSend} onClear={clearMessages} />

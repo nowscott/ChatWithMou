@@ -8,5 +8,5 @@ module.exports = {
       textAlign: ['justify'],
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 }
