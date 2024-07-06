@@ -2,3 +2,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 自定义类以禁用 -tw-ring-shadow */
+.disable-ring-shadow:focus {
+    box-shadow: none !important;
+}
