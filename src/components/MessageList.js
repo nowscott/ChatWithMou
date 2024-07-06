@@ -69,7 +69,7 @@ const MessageList = ({ messages, onDelete }) => {
             {messages.map((message, index) => (
                 <div
                     key={message.mid}
-                    className={`font-light font-serif shadow-md rounded-lg px-3 py-1 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
+                    className={`font-light font-serif shadow-md rounded-lg p-2 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
                 >
 
                     <div>
@@ -87,10 +87,10 @@ const MessageList = ({ messages, onDelete }) => {
                     )}
                     <div className="absolute bottom-2 right-2 flex space-x-2">
                         <button
-                            className={`text-xs ${pendingDelete[message.mid] ? 'text-violet-400' : 'text-teal-600'}`}
+                            className={`text-xs ${pendingDelete[message.mid] ? 'text-rose-500' : 'text-teal-600'}`}
                             onClick={() => handleDeleteClick(message.mid)}
                         >
-                            {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-violet-400" /> : <HiOutlineTrash className="h-4 w-4" />}
+                            {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-rose-500" /> : <HiOutlineTrash className="h-4 w-4" />}
                         </button>
                         <button
                             className="text-xs text-slate-500"
