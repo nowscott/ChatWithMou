@@ -49,7 +49,7 @@ const InputPrompt = ({ onSend, onClear }) => {
             <div className="p-2 bg-white rounded-lg flex items-center relative max-w-screen-md w-full mx-auto">
                 <div className="flex flex-grow items-center border-2 rounded border-slate-300 bg-stone-50">
                     <button
-                        className="p-1 text-violet-400"
+                        className="p-1 text-rose-500"
                         onClick={handleClear}
                     >
                         <HiOutlineTrash className="h-6 w-6" />
