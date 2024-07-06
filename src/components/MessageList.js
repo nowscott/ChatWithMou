@@ -69,7 +69,7 @@ const MessageList = ({ messages, onDelete }) => {
             {messages.map((message, index) => (
                 <div
                     key={message.mid}
-                    className={`font-light font-serif shadow-md rounded-lg px-3 py-1 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
+                    className={`font-light font-serif shadow-md rounded-lg p-2 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
                 >
 
                     <div>
