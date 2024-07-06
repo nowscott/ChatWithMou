@@ -87,16 +87,16 @@ const MessageList = ({ messages, onDelete }) => {
                     )}
                     <div className="absolute bottom-2 right-2 flex space-x-2">
                         <button
-                            className={`text-xs ${pendingDelete[message.mid] ? 'text-rose-500' : 'text-teal-600'}`}
+                            className={`text-xs ${pendingDelete[message.mid] ? 'text-rose-500' : 'text-emerald-400'}`}
                             onClick={() => handleDeleteClick(message.mid)}
                         >
                             {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-rose-500" /> : <HiOutlineTrash className="h-4 w-4" />}
                         </button>
                         <button
-                            className="text-xs text-slate-500"
+                            className="text-xs text-sky-500"
                             onClick={() => handleCopy(message.content, message.mid)}
                         >
-                            {copied === message.mid ? <HiCheckCircle className="h-4 w-4 text-teal-600" /> : <HiOutlineDuplicate className="h-4 w-4" />}
+                            {copied === message.mid ? <HiCheckCircle className="h-4 w-4 text-emerald-400" /> : <HiOutlineDuplicate className="h-4 w-4" />}
                         </button>
                     </div>
                 </div>))}
