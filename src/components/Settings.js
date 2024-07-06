@@ -33,7 +33,7 @@ const Settings = ({ settings, onSettingsChange }) => {
 
     return (
         <div className='font-serif'>
-            <h1 className="text-2xl font-bold mb-4">设置界面</h1>
+            <h1 className="text-4xl text-slate-700 font-bold mb-4">设置界面</h1>
             {settingsConfig.map(setting => {
                 if (setting.type === 'select') {
                     return (

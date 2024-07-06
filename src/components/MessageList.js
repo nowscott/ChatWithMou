@@ -69,10 +69,10 @@ const MessageList = ({ messages, onDelete }) => {
             {messages.map((message, index) => (
                 <div
                     key={message.mid}
-                    className={`font-light font-serif bg-white shadow-md rounded-lg py-2 px-4 relative max-w-screen-md w-full mx-auto ${index !== messages.length - 1 ? 'mb-4' : ''}`}
+                    className={`font-light font-serif shadow-md rounded-lg px-3 py-1 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
                 >
+
                     <div>
-                        <strong>{message.role === 'user' ? '你' : 'AI'}:</strong>
                         <ReactMarkdown
                             components={customRenderers}
                             remarkPlugins={[remarkGfm]}
@@ -81,26 +81,25 @@ const MessageList = ({ messages, onDelete }) => {
                             {message.content}
                         </ReactMarkdown>
                     </div>
-                    <div className="text-gray-500 text-sm">{moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
+                    <div className="text-gray-600 text-xs">{moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
                     {message.totalTokens !== null && (
-                        <div className="text-gray-500 text-sm">Token: {message.totalTokens}</div>
+                        <div className="text-gray-600 text-xs">Token: {message.totalTokens}</div>
                     )}
                     <div className="absolute bottom-2 right-2 flex space-x-2">
                         <button
-                            className={`text-xs ${pendingDelete[message.mid] ? 'text-red-500' : 'text-green-700'}`}
+                            className={`text-xs ${pendingDelete[message.mid] ? 'text-violet-400' : 'text-teal-600'}`}
                             onClick={() => handleDeleteClick(message.mid)}
                         >
-                            {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-red-500" /> : <HiOutlineTrash className="h-4 w-4" />}
+                            {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-violet-400" /> : <HiOutlineTrash className="h-4 w-4" />}
                         </button>
                         <button
-                            className="text-xs text-blue-500"
+                            className="text-xs text-slate-500"
                             onClick={() => handleCopy(message.content, message.mid)}
                         >
-                            {copied === message.mid ? <HiCheckCircle className="h-4 w-4 text-green-500" /> : <HiOutlineDuplicate className="h-4 w-4" />}
+                            {copied === message.mid ? <HiCheckCircle className="h-4 w-4 text-teal-600" /> : <HiOutlineDuplicate className="h-4 w-4" />}
                         </button>
                     </div>
-                </div>
-            ))}
+                </div>))}
             <div ref={messageEndRef}></div>
         </div>
     );
