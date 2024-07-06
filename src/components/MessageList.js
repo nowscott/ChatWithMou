@@ -65,7 +65,7 @@ const MessageList = ({ messages, onDelete }) => {
     };
 
     return (
-        <div ref={containerRef} className='flex-1 overflow-auto p-4'>
+        <div ref={containerRef} className='flex-1 overflow-auto p-4' style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
             {messages.map((message, index) => (
                 <div
                     key={message.mid}
