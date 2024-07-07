@@ -2,7 +2,6 @@ import React from 'react';
 import { saveAs } from 'file-saver';
 import { HiOutlineDownload } from "react-icons/hi";
 import moment from 'moment';
-import MessageHistory from './MessageHistory';
 
 const convertMessagesToMarkdown = (messages, title) => {
     const header = `# ${title}\n\n`;
@@ -20,8 +19,9 @@ const exportMarkdown = (markdown, filename) => {
 };
 
 const MessageExporter = () => {
-    const { messages } = MessageHistory();
     const handleExport = () => {
+        const savedMessages = localStorage.getItem('messages');
+        const messages = savedMessages ? JSON.parse(savedMessages) : [];
         const date = moment().format('YYYY-MM-DD_HH-mm-ss');
         const title = `chat-history-${date}`;
         const md = convertMessagesToMarkdown(messages, title);
