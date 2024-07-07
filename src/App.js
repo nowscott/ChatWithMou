@@ -10,21 +10,9 @@ const App = () => {
     const { messages, addUserMessage, addAIMessage, updateMessage, clearMessages, deleteMessage } = MessageHistory();
     const [submittedPrompt, setSubmittedPrompt] = useState('');
     const [aiMessageMid, setAiMessageMid] = useState(null);
-    const [settings, setSettings] = useState(() => {
-        const savedSettings = JSON.parse(localStorage.getItem('settings')) || {};
-        return {
-            apiKey: savedSettings.apiKey || '',
-            systemPrompt: savedSettings.systemPrompt || '',
-            maxTokens: savedSettings.maxTokens || 4096,
-            temperature: savedSettings.temperature || 0.7,
-            topP: savedSettings.topP || 0.7,
-            topK: savedSettings.topK || 50,
-            frequencyPenalty: savedSettings.frequencyPenalty || 0.5,
-            model: savedSettings.model || 'Qwen/Qwen2-7B-Instruct'
-        };
-    });
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMessageComplete, setIsMessageComplete] = useState(false);
+    const settings = JSON.parse(localStorage.getItem('settings'))
 
     const handleContentUpdate = useCallback((newContent) => {
         if (!isMessageComplete) {
@@ -57,7 +45,7 @@ const App = () => {
         setIsSettingsOpen(true);
     };
 
-    const handleCloseSettings = () => {
+    const handleCloseSettings = (newSettings) => { 
         setIsSettingsOpen(false);
     };
 
@@ -88,9 +76,8 @@ const App = () => {
             )}
             <SettingsModal
                 isOpen={isSettingsOpen}
-                onRequestClose={handleCloseSettings}
+                onRequestClose={() => handleCloseSettings(settings)} // 确保 newSettings 正确传递
                 settings={settings}
-                onSettingsChange={setSettings}
             />
         </div>
     );

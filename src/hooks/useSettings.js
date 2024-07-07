@@ -1,5 +1,5 @@
 // src/hooks/useSettings.js
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 
 const useSettings = (initialSettings) => {
     const [settings, setSettings] = useState(() => {

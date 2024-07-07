@@ -1,7 +1,7 @@
 import React from 'react';
 import SettingInput from './SettingInput';
-import { models, settingsConfig } from '../settingsConfig'; // 根据实际目录修改
-import useSettings from '../hooks/useSettings'; // 根据实际目录修改
+import { models, settingsConfig } from '../settingsConfig';
+import useSettings from '../hooks/useSettings';
 
 const Settings = ({ initialSettings }) => {
     const [settings, updateSetting] = useSettings(initialSettings);

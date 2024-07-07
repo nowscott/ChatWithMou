@@ -19,3 +19,14 @@ export const settingsConfig = [
     { label: 'Top K', type: 'range', min: 0, max: 100, stateKey: 'topK' },
     { label: '频率惩罚', type: 'range', min: 0, max: 2, step: 0.1, stateKey: 'frequencyPenalty' }
 ];
+
+export const initialSettings = {
+    apiKey: '',
+    systemPrompt: '',
+    maxTokens: 4096,
+    temperature: 0.7,
+    topP: 0.7,
+    topK: 50,
+    frequencyPenalty: 0.5,
+    model: 'Qwen/Qwen2-7B-Instruct'
+};
