@@ -5,13 +5,11 @@ const MessageHistory = () => {
     const [messages, setMessages] = useState([]);
     const isFirstRender = useRef(true);
 
-    // 加载初始消息
     useEffect(() => {
         const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
         setMessages(savedMessages);
     }, []);
 
-    // 保存消息到 localStorage
     useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false;
