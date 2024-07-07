@@ -7,14 +7,26 @@ const systemPrompt0 = `
 3. 不需要提供类似“AI:”的前缀！！！
 `;
 
-const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, onCompletion, model, apiKey, maxTokens, temperature, 
-    topP, topK, frequencyPenalty, systemPrompt }) => {
+const ChatAPI = ({
+    prompt,
+    onContentUpdate,
+    onTokenUpdate,
+    onCompletion,
+    model,
+    apiKey,
+    maxTokens,
+    temperature,
+    topP,
+    topK,
+    frequencyPenalty,
+    systemPrompt,
+}) => {
+    const envApiKey = process.env.REACT_APP_API_KEY;
     const fullSystemPrompt = `${systemPrompt0}\n${systemPrompt}`;
-
     const { sendMessage } = useChatAPI({
         prompt,
         model,
-        apiKey,
+        apiKey: apiKey || envApiKey,
         maxTokens,
         temperature,
         topP,
@@ -23,13 +35,11 @@ const ChatAPI = ({ prompt, onContentUpdate, onTokenUpdate, onCompletion, model, 
         systemPrompt: fullSystemPrompt,
         onContentUpdate,
         onTokenUpdate,
-        onCompletion
+        onCompletion,
     });
-
     useEffect(() => {
         sendMessage();
     }, [prompt, sendMessage]);
-
     return null;
 };
 

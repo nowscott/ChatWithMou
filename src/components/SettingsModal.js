@@ -22,7 +22,7 @@ const SettingsModal = ({ isOpen, onRequestClose, settings, onSettingsChange }) =
                         </button>
                     </div>
                     <Settings
-                        settings={settings}
+                        initialSettings={settings}
                         onSettingsChange={onSettingsChange}
                     />
                 </div>
