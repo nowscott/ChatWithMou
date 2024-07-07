@@ -20,10 +20,8 @@ const exportMarkdown = (markdown, filename) => {
 
 const MessageExporter = () => {
     const handleExport = () => {
-        // 从缓存中读取消息
         const savedMessages = localStorage.getItem('messages');
         const messages = savedMessages ? JSON.parse(savedMessages) : [];
-        
         const date = moment().format('YYYY-MM-DD_HH-mm-ss');
         const title = `chat-history-${date}`;
         const md = convertMessagesToMarkdown(messages, title);
