@@ -5,6 +5,7 @@ import MessageHistory from './components/MessageHistory';
 import MessageList from './components/MessageList';
 import NavBar from './components/NavBar';
 import SettingsModal from './components/SettingsModal';
+import { initialSettings } from './settingsConfig';
 
 const App = () => {
     const { messages, addUserMessage, addAIMessage, updateMessage, clearMessages, deleteMessage } = MessageHistory();
@@ -12,7 +13,7 @@ const App = () => {
     const [aiMessageMid, setAiMessageMid] = useState(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMessageComplete, setIsMessageComplete] = useState(false);
-    const settings = JSON.parse(localStorage.getItem('settings'))
+    const settings = JSON.parse(localStorage.getItem('settings')) || initialSettings;
 
     const handleContentUpdate = useCallback((newContent) => {
         if (!isMessageComplete) {
@@ -76,7 +77,7 @@ const App = () => {
             )}
             <SettingsModal
                 isOpen={isSettingsOpen}
-                onRequestClose={() => handleCloseSettings(settings)} // 确保 newSettings 正确传递
+                onRequestClose={() => handleCloseSettings(settings)}
                 settings={settings}
             />
         </div>
