@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { HiOutlineTrash, HiOutlineAnnotation } from "react-icons/hi";
 
 const InputPrompt = ({ onSend, onClear }) => {
@@ -37,13 +37,6 @@ const InputPrompt = ({ onSend, onClear }) => {
         }
     };
 
-    // 动态调整文本区域高度
-    useEffect(() => {
-        const textarea = document.querySelector('textarea');
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-    }, [prompt]);
-
     return (
         <div className="flex-0 w-full bg-slate-400 p-2">
             <div className="p-2 bg-white rounded-lg flex items-center relative max-w-screen-md w-full mx-auto">
@@ -55,7 +48,8 @@ const InputPrompt = ({ onSend, onClear }) => {
                         <HiOutlineTrash className="h-6 w-6" />
                     </button>
                     <textarea
-  className="bg-stone-50 font-serif w-full p-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words disable-ring-shadow"                        style={{ maxHeight: '10rem', minHeight: '1rem' }}
+                        className="bg-stone-50 font-serif w-full p-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words disable-ring-shadow"
+                        style={{ maxHeight: '10rem', minHeight: '1rem' }}
                         rows="1"
                         value={prompt}
                         onChange={handleChange}
