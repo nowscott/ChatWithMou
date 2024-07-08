@@ -31,6 +31,7 @@ const SettingInput = ({ label, type = 'text', value, onChange, min, max, step })
                     value={value}
                     onChange={onChange}
                     style={type === 'password' ? { WebkitTextSecurity: 'disc' } : {}}
+                    autoComplete="new-password"
                 />
                 <span className="ml-2 w-12"></span>
             </div>
