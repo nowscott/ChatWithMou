@@ -1,4 +1,5 @@
 import React from 'react';
+import TestAPIKey from './TestAPIKey';
 
 const SettingInput = ({ label, type = 'text', value, onChange, min, max, step }) => (
     <div className="font-serif mb-4">
@@ -33,7 +34,9 @@ const SettingInput = ({ label, type = 'text', value, onChange, min, max, step })
                     style={type === 'password' ? { WebkitTextSecurity: 'disc' } : {}}
                     autoComplete="new-password"
                 />
-                <span className="ml-2 w-12"></span>
+                <span className="ml-2 flex-col">
+                    <TestAPIKey className='' triggerTest={value} apiKey={value}/>
+                </span>
             </div>
         )}
     </div>
