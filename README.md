@@ -1,2 +1,2 @@
 # Chat With Qwen
-一个基于Qwen2 7B + React + Tailwind Css大语言模型 API 的聊天网页(A chat webpage based on Qwen2 7B + React + Tailwind CSS large language model API)
+一个基于 React + Tailwind Css + siliconflowAPI的聊天网页、提供多种免费模型，可以实现导出，参数条件等功能   （A chat webpage based on React + Tailwind Css + siliconflowAPI, providing a variety of free models, which can implement export, parameter conditions and other functions）
