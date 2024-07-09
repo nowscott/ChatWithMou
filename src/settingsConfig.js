@@ -6,7 +6,8 @@ export const models = [
     { value: 'Qwen/Qwen1.5-7B-Chat', title: 'Qwen' },
     { value: 'THUDM/glm-4-9b-chat', title: 'GLM' },
     { value: 'THUDM/chatglm3-6b', title: 'GLM' },
-    { value: '01-ai/Yi-1.5-9B-Chat-16K', title: '「零一」' }
+    { value: '01-ai/Yi-1.5-9B-Chat-16K', title: '「零一」' },
+    { value: '01-ai/Yi-1.5-6B-Chat', title:'「零一」'}
 ];
 
 export const settingsConfig = [
