@@ -66,40 +66,49 @@ const MessageList = ({ messages, onDelete }) => {
 
     return (
         <div ref={containerRef} className='flex-1 overflow-auto p-4' style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
-            {messages.map((message, index) => (
-                <div
-                    key={message.mid}
-                    className={`shadow-md rounded-lg p-2 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
-                >
-
-                    <div>
-                        <ReactMarkdown
-                            components={customRenderers}
-                            remarkPlugins={[remarkGfm]}
-                            className="break-words markdown-content whitespace-nowrap"
-                        >
-                            {message.content}
-                        </ReactMarkdown>
+            {messages.length === 0 ? (
+                <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                        <p className="text-6xl text-gray-500 mb-4 tracking-widest">对牛弹琴</p>
+                        <p className="text-sm text-gray-400">每一次对话，都是一场思想碰撞</p>
                     </div>
-                    <div className="text-gray-600 text-xs">{moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
-                    {message.totalTokens !== null && (
-                        <div className="text-gray-600 text-xs">Token: {message.totalTokens}</div>
-                    )}
-                    <div className="absolute bottom-2 right-2 flex space-x-2">
-                        <button
-                            className={`text-xs ${pendingDelete[message.mid] ? 'text-rose-500' : 'text-emerald-400'}`}
-                            onClick={() => handleDeleteClick(message.mid)}
-                        >
-                            {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-rose-500" /> : <HiOutlineTrash className="h-4 w-4" />}
-                        </button>
-                        <button
-                            className="text-xs text-sky-500"
-                            onClick={() => handleCopy(message.content, message.mid)}
-                        >
-                            {copied === message.mid ? <HiCheckCircle className="h-4 w-4 text-emerald-400" /> : <HiOutlineDuplicate className="h-4 w-4" />}
-                        </button>
+                </div>
+            ) : (
+                messages.map((message, index) => (
+                    <div
+                        key={message.mid}
+                        className={`shadow-md rounded-lg p-2 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
+                    >
+                        <div>
+                            <ReactMarkdown
+                                components={customRenderers}
+                                remarkPlugins={[remarkGfm]}
+                                className="break-words markdown-content whitespace-nowrap"
+                            >
+                                {message.content}
+                            </ReactMarkdown>
+                        </div>
+                        <div className="text-gray-600 text-xs">{moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
+                        {message.totalTokens !== null && (
+                            <div className="text-gray-600 text-xs">Token: {message.totalTokens}</div>
+                        )}
+                        <div className="absolute bottom-2 right-2 flex space-x-2">
+                            <button
+                                className={`text-xs ${pendingDelete[message.mid] ? 'text-rose-500' : 'text-emerald-400'}`}
+                                onClick={() => handleDeleteClick(message.mid)}
+                            >
+                                {pendingDelete[message.mid] ? <HiExclamation className="h-4 w-4 text-rose-500" /> : <HiOutlineTrash className="h-4 w-4" />}
+                            </button>
+                            <button
+                                className="text-xs text-sky-500"
+                                onClick={() => handleCopy(message.content, message.mid)}
+                            >
+                                {copied === message.mid ? <HiCheckCircle className="h-4 w-4 text-emerald-400" /> : <HiOutlineDuplicate className="h-4 w-4" />}
+                            </button>
+                        </div>
                     </div>
-                </div>))}
+                ))
+            )}
             <div ref={messageEndRef}></div>
         </div>
     );
