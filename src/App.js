@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ChatAPI from './components/ChatAPI';
 import InputPrompt from './components/InputPrompt';
 import MessageHistory from './components/MessageHistory';
@@ -13,7 +13,17 @@ const App = () => {
     const [aiMessageMid, setAiMessageMid] = useState(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMessageComplete, setIsMessageComplete] = useState(false);
-    const settings = JSON.parse(localStorage.getItem('settings')) || initialSettings;
+    const [settings, setSettings] = useState(JSON.parse(localStorage.getItem('settings')) || initialSettings);
+
+    useEffect(() => {
+        const apiKeyStatus = localStorage.getItem('apiKeyStatus'); 
+        if (apiKeyStatus !== 'true') {
+            setSettings((prevSettings) => ({
+                ...prevSettings,
+                apiKey: '', 
+            }));
+        }
+    }, []);
 
     const handleContentUpdate = useCallback((newContent) => {
         if (!isMessageComplete) {
@@ -46,7 +56,7 @@ const App = () => {
         setIsSettingsOpen(true);
     };
 
-    const handleCloseSettings = (newSettings) => { 
+    const handleCloseSettings = () => { 
         setIsSettingsOpen(false);
     };
 

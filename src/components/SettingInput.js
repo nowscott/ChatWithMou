@@ -1,6 +1,7 @@
 import React from 'react';
+import TestAPIKey from './TestAPIKey';
 
-const SettingInput = ({ label, type = 'text', value, onChange, min, max, step }) => (
+const SettingInput = ({ label, type = 'text', value, onChange, min, max, step}) => (
     <div className="font-serif mb-4">
         <label className="block mb-2">{label}:</label>
         {type === 'range' ? (
@@ -33,7 +34,9 @@ const SettingInput = ({ label, type = 'text', value, onChange, min, max, step })
                     style={type === 'password' ? { WebkitTextSecurity: 'disc' } : {}}
                     autoComplete="new-password"
                 />
-                <span className="ml-2 w-12"></span>
+                <span className="ml-2 w-12 flex-col">
+                    <TestAPIKey apiKey={value}/>
+                </span>
             </div>
         )}
     </div>

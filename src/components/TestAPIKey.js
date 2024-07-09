@@ -1,40 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import useChatAPI from 'hooks/useChatAPI';
 
-const TestAPIKey = ({ triggerTest }) => {
-    const [isValid, setIsValid] = useState(null); // null: 尚未测试, true: 有效, false: 无效
+const TestAPIKey = ({ apiKey }) => {
+  const [isValid, setIsValid] = useState(false);
 
-    const { sendMessage } = useChatAPI({
-        prompt: '你好',
-        model: 'text-davinci-003', // 替换为你的模型名称
-        apiKey: '你的API密钥', // 替换为你的API密钥
-        maxTokens: 1,
+  useEffect(() => {
+    if (!apiKey) {
+      setIsValid(false);
+      localStorage.setItem('apiKeyStatus', 'false');
+      return;
+    }
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    const options = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'Qwen/Qwen2-7B-Instruct',
+        messages: [{ role: 'user', content: '你好' }],
+        max_tokens: 1,
         temperature: 0.7,
-        topP: 1.0,
-        topK: 50,
-        frequencyPenalty: 1,
-        systemPrompt: '',
-        onContentUpdate: () => { },
-        onTokenUpdate: () => { },
-        onCompletion: () => setIsValid(true),
-        onError: () => setIsValid(false) // 处理错误，设置为无效
-    });
+        top_p: 0.7,
+        top_k: 50,
+        frequency_penalty: 0.5,
+      }),
+      signal,
+    };
 
-    useEffect(() => {
-        if (triggerTest) {
-            setIsValid(null); // 重置状态
-            sendMessage();
+    fetch('https://api.siliconflow.cn/v1/chat/completions', options)
+      .then(response => {
+        if (response.status === 200) {
+          setIsValid(true);
+          localStorage.setItem('apiKeyStatus', 'true');
+        } else {
+          setIsValid(false);
+          localStorage.setItem('apiKeyStatus', 'false');
         }
-    }, [triggerTest, sendMessage]);
+      })
+      .catch(() => {
+        setIsValid(false);
+        localStorage.setItem('apiKeyStatus', 'false');
+      });
 
-    return (
-        <div className="mt-4">
-            {isValid === null && <p>尚未测试</p>}
-            {isValid === true && <FaCheckCircle color="lime" size="2em" />}
-            {isValid === false && <FaTimesCircle color="red" size="2em" />}
-        </div>
-    );
+    return () => {
+      controller.abort();
+    };
+  }, [apiKey]);
+
+  return (
+    <div className="overflow-y-auto">
+      {isValid === true ? (
+        <FaCheckCircle color="lime" size="1em" />
+      ) : (
+        <FaTimesCircle color="red" size="1em" />
+      )}
+    </div>
+  );
 };
 
 export default TestAPIKey;
