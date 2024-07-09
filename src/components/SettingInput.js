@@ -34,7 +34,7 @@ const SettingInput = ({ label, type = 'text', value, onChange, min, max, step}) 
                     style={type === 'password' ? { WebkitTextSecurity: 'disc' } : {}}
                     autoComplete="new-password"
                 />
-                <span className="ml-2 flex-col">
+                <span className="ml-2 w-12 flex-col">
                     <TestAPIKey apiKey={value}/>
                 </span>
             </div>

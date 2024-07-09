@@ -5,7 +5,6 @@ import useSettings from '../hooks/useSettings';
 
 const Settings = () => {
     const [settings, updateSetting] = useSettings();
-    // const [isValid, setIsValid] = useState(null);
     const [maxTokens, setMaxTokens] = useState(4096);
 
     useEffect(() => {
@@ -14,7 +13,6 @@ const Settings = () => {
             setMaxTokens(selectedModel.maxTokens);
         }
     }, [settings.model]);
-    // const filteredModels = isValid ? models : models.filter(model => model.isFree);
 
     return (
         <div className='font-serif'>

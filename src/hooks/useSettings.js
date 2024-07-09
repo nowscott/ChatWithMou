@@ -20,7 +20,7 @@ const useSettings = () => {
             const apiKeyStatus = selectedModel && !selectedModel.isFree
             ? localStorage.getItem('apiKeyStatus')
             : 'true';
-            if (apiKeyStatus === 'false') {
+            if (apiKeyStatus !== 'true') {
                 alert("当前api密钥不可用，不能使用付费模型");
                 newSettings.model = initialSettings.model;
             }
@@ -31,7 +31,7 @@ const useSettings = () => {
             const apiKeyStatus = currentModel && !currentModel.isFree
                 ? localStorage.getItem('apiKeyStatus')
                 : 'false';
-            if (apiKeyStatus === 'true') {
+            if (apiKeyStatus !== 'false') {
                 alert("当前api密钥不可用，不能使用付费模型");
                 newSettings.model = initialSettings.model;
             }
