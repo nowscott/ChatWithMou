@@ -1,60 +1,58 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import useChatAPI from 'hooks/useChatAPI';
 
-const TestAPIKey = ({ triggerTest, apiKey }) => {
-    const [isValid, setIsValid] = useState(null);
-
-    const { sendMessage: originalSendMessage } = useChatAPI({
-        prompt: '你好',
-        model: 'Qwen/Qwen1.5-7B-Chat',
-        apiKey: apiKey, // 使用传入的apiKey
-        maxTokens: 10,
-        temperature: 0.7,
-        topP: 1.0,
-        topK: 50,
-        frequencyPenalty: 1,
-        systemPrompt: '',
-        onContentUpdate: () => {
-            // 收到内容回传，说明API Key有效
-            setIsValid(true);
+const TestAPIKey = ({ apiKey }) => {
+  const [isValid, setIsValid] = useState(null);
+  useEffect(() => {
+    if (apiKey) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      const options = {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+          authorization: `Bearer ${apiKey}`,
         },
-        onTokenUpdate: () => { },
-        onCompletion: () => { },
-        onError: () => {
+        body: JSON.stringify({
+          model: 'Qwen/Qwen2-7B-Instruct',
+          messages: [{ role: 'user', content: '你好' }],
+          max_tokens: 1,
+          temperature: 0.7,
+          top_p: 0.7,
+          top_k: 50,
+          frequency_penalty: 0.5,
+        }),
+        signal,
+      };
+      fetch('https://api.siliconflow.cn/v1/chat/completions', options)
+        .then(response => {
+          if (response.status === 200) {
+            setIsValid(true);
+            localStorage.setItem('apiKeyStatus', true);
+          } else {
             setIsValid(false);
-        }
-    });
-
-    const sendMessage = useCallback(() => {
-        originalSendMessage();
-    }, [originalSendMessage]);
-
-    useEffect(() => {
-        if (triggerTest) {
-            // 设置一个定时器，1秒后检查是否收到内容回传
-            const timer = setTimeout(() => {
-                if (isValid === null) {
-                    setIsValid(false);
-                }
-            }, 1000);
-
-            sendMessage();
-
-            // 清理定时器
-            return () => clearTimeout(timer);
-        }
-    }, [triggerTest]);
-
-    return (
-        <div className="overflow-y-auto">
-            {isValid === true ? (
-                <FaCheckCircle color="lime" size="1em" />
-            ) : isValid === false ? (
-                <FaTimesCircle color="red" size="1em" />
-            ) : null}
-        </div>
-    );
+            localStorage.setItem('apiKeyStatus', false);
+          }
+        })
+        .catch(() => {
+          setIsValid(false);
+          localStorage.setItem('apiKeyStatus', false);
+        });
+      return () => {
+        controller.abort();
+      };
+    }
+  }, [apiKey]); 
+  return (
+    <div className="overflow-y-auto">
+      {isValid === true ? (
+        <FaCheckCircle color="lime" size="1em" />
+      ) : isValid === false ? (
+        <FaTimesCircle color="red" size="1em" />
+      ) : null}
+    </div>
+  );
 };
 
 export default TestAPIKey;

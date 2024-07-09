@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SettingInput from './SettingInput';
 import { models, settingsConfig } from '../settingsConfig';
 import useSettings from '../hooks/useSettings';
 
-const Settings = ({ initialSettings }) => {
-    const [settings, updateSetting] = useSettings(initialSettings);
+const Settings = () => {
+    const [settings, updateSetting] = useSettings();
+    // const [isValid, setIsValid] = useState(null);
+    const [maxTokens, setMaxTokens] = useState(4096);
+
+    useEffect(() => {
+        const selectedModel = models.find(model => model.value === settings.model);
+        if (selectedModel) {
+            setMaxTokens(selectedModel.maxTokens);
+        }
+    }, [settings.model]);
+    // const filteredModels = isValid ? models : models.filter(model => model.isFree);
 
     return (
         <div className='font-serif'>
@@ -20,7 +30,9 @@ const Settings = ({ initialSettings }) => {
                                 onChange={(e) => updateSetting(setting.stateKey, e.target.value)}
                             >
                                 {models.map(model => (
-                                    <option key={model.value} value={model.value}>{model.value}</option>
+                                    <option key={model.value} value={model.value}>
+                                        {model.value} {model.isFree && "(免费)"}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -34,7 +46,7 @@ const Settings = ({ initialSettings }) => {
                             value={settings[setting.stateKey]}
                             onChange={(e) => updateSetting(setting.stateKey, setting.type === 'range' ? parseFloat(e.target.value) : e.target.value)}
                             min={setting.min}
-                            max={setting.max}
+                            max={setting.max === 0 ? maxTokens : setting.max}
                             step={setting.step}
                         />
                     );
