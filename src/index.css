@@ -1,8 +1,12 @@
 /* index.css */
+@import url('https://chinese-fonts-cdn.deno.dev/chinesefonts3/packages/lxgwmanhei/dist/LXGWMarkerGothic/result.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+body {
+    @apply font-sans;
+  }
 /* 自定义类以禁用 -tw-ring-shadow */
 .disable-ring-shadow:focus {
     box-shadow: none !important;

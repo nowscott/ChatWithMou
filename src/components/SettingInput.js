@@ -2,7 +2,7 @@ import React from 'react';
 import TestAPIKey from './TestAPIKey';
 
 const SettingInput = ({ label, type = 'text', value, onChange, min, max, step}) => (
-    <div className="font-serif mb-4">
+    <div className="mb-4">
         <label className="block mb-2">{label}:</label>
         {type === 'range' ? (
             <div className="flex items-center">

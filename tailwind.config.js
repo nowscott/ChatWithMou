@@ -6,6 +6,9 @@ module.exports = {
   theme: {
     extend: {
       textAlign: ['justify'],
+      fontFamily: {
+        sans: ['"霞鹜文楷"', 'sans-serif'],
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],
