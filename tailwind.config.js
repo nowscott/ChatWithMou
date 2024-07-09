@@ -5,7 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      textAlign: ['justify'],
+      fontFamily: {
+        sans: ['"LXGW WenKai"', 'Consolas'],
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

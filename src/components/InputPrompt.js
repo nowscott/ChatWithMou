@@ -48,7 +48,7 @@ const InputPrompt = ({ onSend, onClear }) => {
                         <HiOutlineTrash className="h-6 w-6" />
                     </button>
                     <textarea
-                        className="bg-stone-50 font-serif w-full p-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words disable-ring-shadow"
+                        className="bg-stone-50 w-full p-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words disable-ring-shadow"
                         style={{ maxHeight: '10rem', minHeight: '1rem' }}
                         rows="1"
                         value={prompt}

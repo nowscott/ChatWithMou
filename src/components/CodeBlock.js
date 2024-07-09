@@ -22,7 +22,7 @@ const CodeBlock = ({ language, value, messageId }) => {
                 style={atomOneDark}
                 language={language}
                 PreTag="div"
-                className="text-sm rounded"
+                className="text-sm rounded-md"
             >
                 {value}
             </SyntaxHighlighter>
