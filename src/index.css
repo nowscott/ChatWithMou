@@ -1,5 +1,4 @@
 /* index.css */
-@import url('https://chinese-fonts-cdn.deno.dev/chinesefonts3/packages/lxgwmanhei/dist/LXGWMarkerGothic/result.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

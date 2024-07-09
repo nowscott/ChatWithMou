@@ -5,9 +5,8 @@ module.exports = {
   ],
   theme: {
     extend: {
-      textAlign: ['justify'],
       fontFamily: {
-        sans: ['"霞鹜文楷"', 'sans-serif'],
+        sans: ['LXGW WenKai', 'Consolas', 'Smiley Sans Oblique', 'serif'],
       },
     },
   },
