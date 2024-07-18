@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import ChatAPI from './components/ChatAPI';
-import InputPrompt from './components/InputPrompt';
+import NavBar from './components/layout/NavBar';
+import MessageList from './components/layout/MessageList';
+import InputPrompt from './components/layout/InputPrompt';
 import MessageHistory from './components/MessageHistory';
-import MessageList from './components/MessageList';
-import NavBar from './components/NavBar';
 import SettingsModal from './components/SettingsModal';
 import { initialSettings } from './settingsConfig';
 
@@ -65,7 +65,7 @@ const App = () => {
     }, []);
 
     return (
-        <div className="flex flex-col h-svh justify-between overflow-hidden bg-stone-200">
+        <div className="flex flex-col h-svh justify-between overflow-hidden bg-stone-200 dark:bg-stone-800">
             <NavBar onSettingsClick={handleSettingsClick} />
             <MessageList messages={messages} onDelete={deleteMessage} />
             <InputPrompt onSend={handleSend} onClear={clearMessages} />
