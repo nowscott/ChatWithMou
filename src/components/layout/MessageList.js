@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState,useContext } from 'react';
 import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { HiOutlineTrash, HiOutlineDuplicate, HiCheckCircle, HiExclamation } from 'react-icons/hi';
-import CodeBlock from './CodeBlock';
+import CodeBlock from '../CodeBlock';
 import copy from 'copy-to-clipboard';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 const MessageList = ({ messages, onDelete }) => {
+    const { darkMode } = useContext(ThemeContext);
     const messageEndRef = useRef(null);
     const containerRef = useRef(null);
     const [copied, setCopied] = useState(null);
@@ -69,16 +71,18 @@ const MessageList = ({ messages, onDelete }) => {
             {messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full">
                     <div className="text-center">
-                        <p className="text-6xl text-gray-500 mb-4 tracking-widest">对牛弹琴</p>
-                        <p className="text-sm text-gray-400">每一次对话，都是一场思想碰撞</p>
+                        <p className="text-6xl text-gray-500 dark:text-yellow-50 mb-4 tracking-widest">对牛弹琴</p>
+                        <p className="text-sm text-gray-400 dark:text-yellow-100">每一次对话，都是一场思想碰撞</p>
                     </div>
                 </div>
             ) : (
                 messages.map((message, index) => (
                     <div
-                        key={message.mid}
-                        className={`shadow-md rounded-lg p-2 relative max-w-screen-md w-full mx-auto ${message.role === 'user' ? 'bg-rose-50' : 'bg-indigo-50'} ${index !== messages.length - 1 ? 'mb-4' : ''}`}
-                    >
+                    key={message.mid}
+                    className={`shadow-md rounded-lg p-2 relative max-w-screen-md w-full mx-auto 
+                        ${message.role === 'user' ? (darkMode ? 'bg-violet-900 text-yellow-50' : 'bg-rose-50') : (darkMode ? 'bg-cyan-900 text-yellow-50' : 'bg-indigo-50')} 
+                        ${index !== messages.length - 1 ? 'mb-4' : ''}`}
+                >
                         <div>
                             <ReactMarkdown
                                 components={customRenderers}
@@ -88,9 +92,9 @@ const MessageList = ({ messages, onDelete }) => {
                                 {message.content}
                             </ReactMarkdown>
                         </div>
-                        <div className="text-gray-600 text-xs">{moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
+                        <div className="text-gray-600 dark:text-gray-200 text-xs">{moment(message.timestamp).format('YYYY-MM-DD HH:mm:ss')}</div>
                         {message.totalTokens !== null && (
-                            <div className="text-gray-600 text-xs">Token: {message.totalTokens}</div>
+                            <div className="text-gray-600 dark:text-gray-200 text-xs">Token: {message.totalTokens}</div>
                         )}
                         <div className="absolute bottom-2 right-2 flex space-x-2">
                             <button

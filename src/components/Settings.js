@@ -16,17 +16,17 @@ const Settings = () => {
 
     return (
         <div >
-            <h1 className="text-4xl text-slate-700 font-bold mb-4">设置界面</h1>
+            <h1 className="text-4xl text-slate-700 dark:text-yellow-100 font-bold mb-4">设置界面</h1>
             <div className="my-4">
-                <p className="text-sm text-gray-600">
-                    获取 API 密钥，请访问 <a href="https://siliconflow.cn/zh-cn/siliconcloud" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">此链接</a>。
+                <p className="text-sm text-gray-600 dark:text-yellow-200">
+                    获取 API 密钥，请访问 <a href="https://siliconflow.cn/zh-cn/siliconcloud" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">此链接</a>
                 </p>
             </div>
             {settingsConfig.map(setting => {
                 if (setting.type === 'select') {
                     return (
                         <div key={setting.label} className="mb-4">
-                            <label className="block mb-2">{setting.label}:</label>
+                            <label className="block mb-2 dark:text-yellow-50">{setting.label}:</label>
                             <select
                                 className="w-full p-2 border rounded"
                                 value={settings[setting.stateKey]}

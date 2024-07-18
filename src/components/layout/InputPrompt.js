@@ -38,9 +38,9 @@ const InputPrompt = ({ onSend, onClear }) => {
     };
 
     return (
-        <div className="flex-0 w-full bg-slate-400 p-2">
-            <div className="p-2 bg-white rounded-lg flex items-center relative max-w-screen-md w-full mx-auto">
-                <div className="flex flex-grow items-center border-2 rounded border-slate-300 bg-stone-50">
+        <div className="flex-0 w-full bg-slate-400 dark:bg-slate-900 p-2">
+            <div className="p-2 bg-white dark:bg-black rounded-lg flex items-center relative max-w-screen-md w-full mx-auto">
+                <div className="flex flex-grow items-center border-2 rounded border-slate-300 bg-stone-50 dark:bg-slate-900">
                     <button
                         className="p-1 text-rose-500"
                         onClick={handleClear}
@@ -48,7 +48,7 @@ const InputPrompt = ({ onSend, onClear }) => {
                         <HiOutlineTrash className="h-6 w-6" />
                     </button>
                     <textarea
-                        className="bg-stone-50 w-full p-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words disable-ring-shadow"
+                        className="bg-stone-50 text-gray-900 dark:bg-stone-900 dark:text-yellow-50 w-full p-1 border-none outline-none resize-none overflow-auto whitespace-pre-wrap break-words disable-ring-shadow"
                         style={{ maxHeight: '10rem', minHeight: '1rem' }}
                         rows="1"
                         value={prompt}
@@ -60,7 +60,7 @@ const InputPrompt = ({ onSend, onClear }) => {
                         }}
                         onCompositionStart={handleCompositionStart}
                         onCompositionEnd={handleCompositionEnd}
-                        placeholder="输入你的提示词..."
+                        placeholder="发送消息..."
                     />
                     <button
                         className="p-1 text-slate-500"
