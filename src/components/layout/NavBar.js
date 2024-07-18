@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
 import { HiOutlineCog, HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'; 
 import MessageExporter from '../MessageExporter';
-import { ThemeContext } from '../../contexts/ThemeContext'; // 引入ThemeContext
+import { ThemeContext } from '../../contexts/ThemeContext'; 
 
 const NavBar = ({ targetRef, onSettingsClick }) => {
     const [title, setTitle] = useState('Chat With Mou');
-    const { darkMode, setDarkMode } = useContext(ThemeContext); // 使用ThemeContext
+    const { darkMode, setDarkMode } = useContext(ThemeContext); 
 
     const toggleTitle = () => {
         setTitle((prevTitle) => (prevTitle === 'Chat With Mou' ? '对牛弹琴' : 'Chat With Mou'));

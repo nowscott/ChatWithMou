@@ -3,7 +3,7 @@ import TestAPIKey from './TestAPIKey';
 
 const SettingInput = ({ label, type = 'text', value, onChange, min, max, step}) => (
     <div className="mb-4">
-        <label className="block mb-2">{label}:</label>
+        <label className="block mb-2 dark:text-yellow-50">{label}:</label>
         {type === 'range' ? (
             <div className="flex items-center">
                 <input
@@ -15,7 +15,7 @@ const SettingInput = ({ label, type = 'text', value, onChange, min, max, step}) 
                     value={value}
                     onChange={onChange}
                 />
-                <span className="ml-2 w-12">{value}</span>
+                <span className="ml-2 w-12 dark:text-yellow-50">{value}</span>
             </div>
         ) : type === 'text' ? (
             <textarea
