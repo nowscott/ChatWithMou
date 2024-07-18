@@ -26,13 +26,13 @@ const NavBar = ({ targetRef, onSettingsClick }) => {
                     <span>{title}</span>
                 </h1>
                 <div className="flex items-center gap-4">
+                    <MessageExporter targetRef={targetRef} />
                     <button onClick={onSettingsClick}>
                         <HiOutlineCog size={24} />
                     </button>
                     <button onClick={toggleDarkMode}>
                         {darkMode ? <HiOutlineSun size={24} /> : <HiOutlineMoon size={24} />}
                     </button>
-                    <MessageExporter targetRef={targetRef} />
                 </div>
             </div>
         </div>
