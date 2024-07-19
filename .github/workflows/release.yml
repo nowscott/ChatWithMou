@@ -49,7 +49,7 @@ jobs:
         run: |
           git fetch --tags
           # 获取提交信息并格式化
-          RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD
+          RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD)
 
       - name: Generate Full Changelog
         if: env.RELEASE == 'true'
