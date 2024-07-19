@@ -51,10 +51,15 @@ jobs:
           # 获取提交信息并格式化
           RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:"* %s by @%an in %h" --abbrev-commit)
           # 处理日志换行符
-          RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
-          RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
-          RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
+          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed ':a;N;$!ba;s/\n/%0A/g' | sed 's/%/%25/g')
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
+
+      - name: Generate Full Changelog
+        if: env.RELEASE == 'true'
+        id: generate_full_changelog
+        run: |
+          FULL_CHANGELOG="Full Changelog: ${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }}"
+          echo "FULL_CHANGELOG=$FULL_CHANGELOG" >> $GITHUB_ENV
 
       - name: Configure Git
         if: env.RELEASE == 'true'
@@ -85,5 +90,6 @@ jobs:
           tag_name: v${{ env.PACKAGE_VERSION }}
           release_name: Release ${{ env.PACKAGE_VERSION }}
           body: |
-            ### 更新日志
+            ### What's Changed
             ${{ env.RELEASE_NOTES }}
+            ${{ env.FULL_CHANGELOG }}
