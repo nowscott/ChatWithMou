@@ -43,15 +43,20 @@ jobs:
             echo "RELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Generate Release Notes
+      - name: Generate GitHub Style Release Notes
         if: env.RELEASE == 'true'
         id: generate_release_notes
         run: |
-          # 确保检出的标签在本地
-          git fetch --tags
-          RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:"* %h %s" --abbrev-commit)
-          RELEASE_NOTES_ESCAPED=$(echo "$RELEASE_NOTES" | awk '{printf "%s\\n", $0}')
-          echo "RELEASE_NOTES=$RELEASE_NOTES_ESCAPED" >> $GITHUB_ENV
+          RELEASE_NOTES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/releases/generate_notes \
+            -d "{\"tag_name\":\"v${{ env.PACKAGE_VERSION }}\",\"previous_tag_name\":\"${{ env.PREVIOUS_TAG }}\"}" \
+            | jq -r '.body')
+          # 处理日志换行符
+          RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
+          RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
+          RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
+          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
       - name: Configure Git
         if: env.RELEASE == 'true'
@@ -81,6 +86,4 @@ jobs:
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
           release_name: Release ${{ env.PACKAGE_VERSION }}
-          body: |
-            ### 更新日志
-            ${{ env.RELEASE_NOTES }}
+          body: ${{ env.RELEASE_NOTES }}
