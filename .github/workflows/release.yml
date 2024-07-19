@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 
+          fetch-depth: 0  # 确保拉取所有历史记录和标签
 
       - name: Get latest release tag
         id: get_latest_release
@@ -43,15 +43,13 @@ jobs:
             echo "RELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Generate GitHub Style Release Notes
+      - name: Generate Release Notes
         if: env.RELEASE == 'true'
         id: generate_release_notes
         run: |
-          RELEASE_NOTES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases/generate_notes \
-            -d "{\"tag_name\":\"v${{ env.PACKAGE_VERSION }}\",\"previous_tag_name\":\"${{ env.PREVIOUS_TAG }}\"}" \
-            | jq -r '.body')
+          git fetch --tags
+          # 获取提交信息并格式化
+          RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:"* %s by @%an in %h" --abbrev-commit)
           # 处理日志换行符
           RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
           RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
@@ -63,14 +61,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-
-      - name: Delete existing tag if exists
-        if: env.RELEASE == 'true'
-        run: |
-          if git rev-parse "v${{ env.PACKAGE_VERSION }}" >/dev/null 2>&1; then
-            git tag -d "v${{ env.PACKAGE_VERSION }}"
-            git push --delete origin "v${{ env.PACKAGE_VERSION }}"
-          fi
 
       - name: Add package.json and commit changes
         if: env.RELEASE == 'true'
@@ -94,4 +84,6 @@ jobs:
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
           release_name: Release ${{ env.PACKAGE_VERSION }}
-          body: ${{ env.RELEASE_NOTES }}
+          body: |
+            ### 更新日志
+            ${{ env.RELEASE_NOTES }}
