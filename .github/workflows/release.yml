@@ -49,6 +49,12 @@ jobs:
           RELEASE_NOTES=$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"* %h %s" --abbrev-commit)
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
+      - name: Configure Git
+        if: env.RELEASE == 'true'
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
       - name: Bump version and push tag
         if: env.RELEASE == 'true'
         env:
