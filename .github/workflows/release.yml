@@ -69,13 +69,6 @@ jobs:
           git commit -m "Bump version to ${{ env.PACKAGE_VERSION }}" || echo "No changes to commit"
 
       - name: Create and push tag
-      - name: Add package.json and commit changes
-        if: env.RELEASE == 'true'
-        run: |
-          git add package.json
-          git commit -m "Bump version to ${{ env.PACKAGE_VERSION }}" || echo "No changes to commit"
-
-      - name: Create and push tag
         if: env.RELEASE == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
