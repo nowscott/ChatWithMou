@@ -46,7 +46,14 @@ jobs:
         if: env.RELEASE == 'true'
         id: generate_release_notes
         run: |
-          RELEASE_NOTES=$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"* %h %s" --abbrev-commit)
+          # 尝试获取上一个版本的标签
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "No previous tag found. Generating release notes from initial commit."
+            PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+          fi
+          # 获取当前版本的提交记录
+          RELEASE_NOTES=$(git log $PREVIOUS_TAG..HEAD --pretty=format:"* %h %s" --abbrev-commit)
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
       - name: Configure Git
@@ -55,14 +62,18 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
-      - name: Bump version and push tag
+      - name: Add package.json and commit changes
+        if: env.RELEASE == 'true'
+        run: |
+          git add package.json
+          git commit -m "Bump version to ${{ env.PACKAGE_VERSION }}" || echo "No changes to commit"
+
+      - name: Create and push tag
         if: env.RELEASE == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           NEW_VERSION=${{ env.PACKAGE_VERSION }}
-          git add package.json
-          git commit -m "Bump version to $NEW_VERSION"
           git tag v$NEW_VERSION
           git push origin main --tags
 
