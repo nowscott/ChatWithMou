@@ -50,7 +50,8 @@ jobs:
           # 确保检出的标签在本地
           git fetch --tags
           RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:"* %h %s" --abbrev-commit)
-          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
+          RELEASE_NOTES_ESCAPED=$(echo "$RELEASE_NOTES" | awk '{printf "%s\\n", $0}')
+          echo "RELEASE_NOTES=$RELEASE_NOTES_ESCAPED" >> $GITHUB_ENV
 
       - name: Configure Git
         if: env.RELEASE == 'true'
