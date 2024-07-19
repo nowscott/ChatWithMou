@@ -49,19 +49,14 @@ jobs:
         run: |
           git fetch --tags
           # 获取提交信息并格式化
-          RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:"* %s by @%an in %h" --abbrev-commit)
-          # 处理日志换行符和百分号
-          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed ':a;N;$!ba;s/\n/%0A/g' | sed 's/%/%25/g')
-          # 恢复换行符
-          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/%0A/\n/g' | sed 's/%25/%/g')
-          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
+          RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD
 
       - name: Generate Full Changelog
         if: env.RELEASE == 'true'
         id: generate_full_changelog
         run: |
           REPO_URL=$(echo "https://github.com/${{ github.repository }}")
-          FULL_CHANGELOG="[Full Changelog: ${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }}]($REPO_URL/compare/${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }})"
+          FULL_CHANGELOG="$REPO_URL/compare/${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }}"
           echo "FULL_CHANGELOG=$FULL_CHANGELOG" >> $GITHUB_ENV
 
       - name: Configure Git
