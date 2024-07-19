@@ -58,7 +58,8 @@ jobs:
         if: env.RELEASE == 'true'
         id: generate_full_changelog
         run: |
-          FULL_CHANGELOG="Full Changelog: ${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }}"
+          REPO_URL=$(echo "https://github.com/${{ github.repository }}")
+          FULL_CHANGELOG="[Full Changelog: ${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }}]($REPO_URL/compare/${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }})"
           echo "FULL_CHANGELOG=$FULL_CHANGELOG" >> $GITHUB_ENV
 
       - name: Configure Git
@@ -90,6 +91,7 @@ jobs:
           tag_name: v${{ env.PACKAGE_VERSION }}
           release_name: Release ${{ env.PACKAGE_VERSION }}
           body: |
-            ### What's Changed
+            ## What's Changed
             ${{ env.RELEASE_NOTES }}
-            ${{ env.FULL_CHANGELOG }}
+            
+            **Full Changelog**: ${{ env.FULL_CHANGELOG }}
