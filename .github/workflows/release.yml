@@ -50,8 +50,10 @@ jobs:
           git fetch --tags
           # 获取提交信息并格式化
           RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD --pretty=format:"* %s by @%an in %h" --abbrev-commit)
-          # 处理日志换行符
+          # 处理日志换行符和百分号
           RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed ':a;N;$!ba;s/\n/%0A/g' | sed 's/%/%25/g')
+          # 恢复换行符
+          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/%0A/\n/g' | sed 's/%25/%/g')
           echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
 
       - name: Generate Full Changelog
@@ -89,7 +91,7 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: Release ${{ env.PACKAGE_VERSION }}
+          release_name: v${{ env.PACKAGE_VERSION }}
           body: |
             ## What's Changed
             ${{ env.RELEASE_NOTES }}
