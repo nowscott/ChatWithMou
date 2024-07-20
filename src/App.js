@@ -1,6 +1,6 @@
 // App.js
 import React from 'react';
-import ChatPage from 'pages/ChatPage';
+import ChatPage from 'ChatPage';
 import { ThemeProvider } from 'contexts/ThemeContext';
 
 const App = () => {
