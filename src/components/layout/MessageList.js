@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { HiOutlineTrash, HiOutlineDuplicate, HiCheckCircle, HiExclamation } from 'react-icons/hi';
 import CodeBlock from '../CodeBlock';
 import copy from 'copy-to-clipboard';
-import { ThemeContext } from '../../contexts/ThemeContext';
+import { ThemeContext } from 'contexts/ThemeContext';
 
 const MessageList = ({ messages, onDelete }) => {
     const { darkMode } = useContext(ThemeContext);

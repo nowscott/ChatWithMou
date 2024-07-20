@@ -1,4 +1,4 @@
-// pages/chatpage.js
+// pages/ChatPage.js
 import React, { useState, useCallback, useEffect } from 'react';
 import ChatAPI from '../components/ChatAPI';
 import NavBar from '../components/layout/NavBar';
