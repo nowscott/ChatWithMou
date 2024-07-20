@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { HiOutlineCog, HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'; 
 import MessageExporter from '../MessageExporter';
-import { ThemeContext } from '../../contexts/ThemeContext'; 
+import { ThemeContext } from 'contexts/ThemeContext'; 
 
 const NavBar = ({ targetRef, onSettingsClick }) => {
     const [title, setTitle] = useState('Chat With Mou');
