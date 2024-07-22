@@ -1,6 +1,6 @@
 {
   "name": "chatwithmou",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.1.4",
@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^14.5.2",
     "copy-to-clipboard": "^3.3.3",
     "file-saver": "^2.0.5",
+    "groq-sdk": "^0.5.0",
     "moment": "^2.30.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
