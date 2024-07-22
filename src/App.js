@@ -2,11 +2,14 @@
 import React from 'react';
 import ChatPage from 'pages/ChatPage';
 import { ThemeProvider } from 'contexts/ThemeContext';
+import { SettingsProvider } from 'contexts/SettingsContext';
 
 const App = () => {
     return (
         <ThemeProvider>
-            <ChatPage />
+            <SettingsProvider>
+                <ChatPage />
+            </SettingsProvider>
         </ThemeProvider>
     );
 };

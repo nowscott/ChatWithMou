@@ -1,10 +1,11 @@
+// src/components/Settings.js
 import React, { useState, useEffect } from 'react';
 import SettingInput from './SettingInput';
-import { models, settingsConfig } from '../settingsConfig';
-import useSettings from '../hooks/useSettings';
+import { models, settingsConfig } from 'settingsConfig';
+import { useSettings } from 'contexts/SettingsContext';
 
 const Settings = () => {
-    const [settings, updateSetting] = useSettings();
+    const { settings, updateSetting } = useSettings();
     const [maxTokens, setMaxTokens] = useState(4096);
 
     useEffect(() => {
@@ -15,11 +16,11 @@ const Settings = () => {
     }, [settings.model]);
 
     return (
-        <div >
+        <div>
             <h1 className="text-4xl text-slate-700 dark:text-yellow-100 font-bold mb-4">设置界面</h1>
             <div className="my-4">
                 <p className="text-sm text-gray-600 dark:text-yellow-200">
-                    获取 API 密钥，请访问 <a href="https://siliconflow.cn/zh-cn/siliconcloud" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">此链接</a>
+                    开源地址： <a href="https://github.com/nowscott/ChatWithMou" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">请点击</a>
                 </p>
             </div>
             {settingsConfig.map(setting => {
