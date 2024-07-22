@@ -24,7 +24,7 @@ export function sendGroqMessage({
 
   if (!prompt.trim()) {
     console.error("提示信息为空，未发送请求");
-    return () => {};
+    return () => { };
   }
 
   const fetchChatCompletion = async () => {

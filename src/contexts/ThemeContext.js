@@ -8,7 +8,7 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour >= 18 || hour <= 6) { 
+    if (hour >= 18 || hour <= 6) {
       setDarkMode(true);
     } else {
       setDarkMode(false);
