@@ -1,5 +1,5 @@
 // src/pages/ChatPage.js
-import React, { useState, useCallback} from 'react';
+import React, { useState, useCallback } from 'react';
 import ChatAPI from 'components/ChatAPI';
 import NavBar from 'components/layout/NavBar';
 import MessageList from 'components/layout/MessageList';
@@ -15,6 +15,7 @@ const ChatPage = () => {
     const [aiMessageMid, setAiMessageMid] = useState(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMessageComplete, setIsMessageComplete] = useState(false);
+    const [shouldSubmit, setShouldSubmit] = useState(false);
 
     const handleContentUpdate = useCallback((newContent) => {
         if (!isMessageComplete) {
@@ -41,6 +42,7 @@ const ChatPage = () => {
         const fullPrompt = `${chatHistory}\n你: ${prompt}`;
         setIsMessageComplete(false);
         setSubmittedPrompt(fullPrompt);
+        setShouldSubmit(true);
     };
 
     const handleSettingsClick = () => {
@@ -53,6 +55,7 @@ const ChatPage = () => {
 
     const handleCompletion = useCallback(() => {
         setIsMessageComplete(true);
+        setShouldSubmit(false);
     }, []);
 
     return (
@@ -60,7 +63,7 @@ const ChatPage = () => {
             <NavBar onSettingsClick={handleSettingsClick} />
             <MessageList messages={messages} onDelete={deleteMessage} />
             <InputPrompt onSend={handleSend} onClear={clearMessages} />
-            {submittedPrompt && !isSettingsOpen && (
+            {submittedPrompt && shouldSubmit && !isSettingsOpen && (
                 <ChatAPI
                     source={settings.source}
                     prompt={submittedPrompt}
