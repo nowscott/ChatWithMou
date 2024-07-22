@@ -75,7 +75,7 @@ const ChatAPI = ({
         topP,
         topK,
         frequencyPenalty,
-        fullSystemPrompt, // 作为依赖项
+        fullSystemPrompt,
         onContentUpdate,
         onTokenUpdate,
         onCompletion,
