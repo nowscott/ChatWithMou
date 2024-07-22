@@ -22,9 +22,14 @@ export function sendGroqMessage({
 }) {
   const controller = new AbortController();
 
+  if (!prompt.trim()) {
+    console.error("提示信息为空，未发送请求");
+    return () => {};
+  }
+
   const fetchChatCompletion = async () => {
     try {
-      console.log(model,'API 请求中...');
+      console.log(model, 'API 请求中...');
       const chatCompletion = await groq.chat.completions.create({
         messages: [
           { role: 'system', content: systemPrompt },
@@ -42,16 +47,16 @@ export function sendGroqMessage({
 
       for await (const chunk of chatCompletion) {
         const content = chunk.choices[0]?.delta?.content || '';
-        // console.log('content', content);
         buffer += content;
         onContentUpdate(buffer);
         buffer = '';
         if (chunk.x_groq && chunk.x_groq.usage) {
           onTokenUpdate(chunk.x_groq.usage.total_tokens);
+          console.log(chunk.x_groq.usage.total_tokens, 'API 请求成功');
         }
       }
       onCompletion();
-      console.log(model,'API 请求成功');
+      console.log(model, 'API 请求成功');
     } catch (error) {
       console.error('API 请求失败:', error);
       onCompletion({ error: '请求失败，请稍后重试。' });
