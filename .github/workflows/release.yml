@@ -43,22 +43,6 @@ jobs:
             echo "RELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Generate Release Notes
-        if: env.RELEASE == 'true'
-        id: generate_release_notes
-        run: |
-          git fetch --tags
-          # 获取提交信息并格式化
-          RELEASE_NOTES=$(git log ${{ env.PREVIOUS_TAG }}..HEAD)
-
-      - name: Generate Full Changelog
-        if: env.RELEASE == 'true'
-        id: generate_full_changelog
-        run: |
-          REPO_URL=$(echo "https://github.com/${{ github.repository }}")
-          FULL_CHANGELOG="$REPO_URL/compare/${{ env.PREVIOUS_TAG }}...v${{ env.PACKAGE_VERSION }}"
-          echo "FULL_CHANGELOG=$FULL_CHANGELOG" >> $GITHUB_ENV
-
       - name: Configure Git
         if: env.RELEASE == 'true'
         run: |
@@ -87,8 +71,3 @@ jobs:
         with:
           tag_name: v${{ env.PACKAGE_VERSION }}
           release_name: v${{ env.PACKAGE_VERSION }}
-          body: |
-            ## What's Changed
-            ${{ env.RELEASE_NOTES }}
-            
-            **Full Changelog**: ${{ env.FULL_CHANGELOG }}
