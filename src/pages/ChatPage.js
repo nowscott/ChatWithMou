@@ -1,5 +1,5 @@
 // src/pages/ChatPage.js
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback} from 'react';
 import ChatAPI from 'components/ChatAPI';
 import NavBar from 'components/layout/NavBar';
 import MessageList from 'components/layout/MessageList';

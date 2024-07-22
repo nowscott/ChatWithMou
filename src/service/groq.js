@@ -24,6 +24,7 @@ export function sendGroqMessage({
 
   const fetchChatCompletion = async () => {
     try {
+      console.log(model,'API 请求中...');
       const chatCompletion = await groq.chat.completions.create({
         messages: [
           { role: 'system', content: systemPrompt },
@@ -41,6 +42,7 @@ export function sendGroqMessage({
 
       for await (const chunk of chatCompletion) {
         const content = chunk.choices[0]?.delta?.content || '';
+        // console.log('content', content);
         buffer += content;
         onContentUpdate(buffer);
         buffer = '';
@@ -48,8 +50,8 @@ export function sendGroqMessage({
           onTokenUpdate(chunk.x_groq.usage.total_tokens);
         }
       }
-
       onCompletion();
+      console.log(model,'API 请求成功');
     } catch (error) {
       console.error('API 请求失败:', error);
       onCompletion({ error: '请求失败，请稍后重试。' });
