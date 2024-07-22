@@ -1,5 +1,5 @@
 // src/pages/ChatPage.js
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ChatAPI from 'components/ChatAPI';
 import NavBar from 'components/layout/NavBar';
 import MessageList from 'components/layout/MessageList';
@@ -16,6 +16,10 @@ const ChatPage = () => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMessageComplete, setIsMessageComplete] = useState(false);
     const [shouldSubmit, setShouldSubmit] = useState(false);
+
+    useEffect(() => {
+        setShouldSubmit(false);
+    }, [settings]);
 
     const handleContentUpdate = useCallback((newContent) => {
         if (!isMessageComplete) {
