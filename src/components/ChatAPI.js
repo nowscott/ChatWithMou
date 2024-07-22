@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import useChatAPI from 'hooks/useChatAPI'; // 确保路径正确
+import { sendSiliconMessage } from 'service/silicon';
+import { sendGroqMessage } from 'service/groq';
 
 const systemPrompt0 = `
 1. 每当用户提供对话记录时，优先使用提供的对话记录进行回答。
@@ -8,12 +9,12 @@ const systemPrompt0 = `
 `;
 
 const ChatAPI = ({
+    source,
     prompt,
     onContentUpdate,
     onTokenUpdate,
     onCompletion,
     model,
-    apiKey,
     maxTokens,
     temperature,
     topP,
@@ -21,25 +22,62 @@ const ChatAPI = ({
     frequencyPenalty,
     systemPrompt,
 }) => {
-    const envApiKey = process.env.REACT_APP_API_KEY;
     const fullSystemPrompt = `${systemPrompt0}\n${systemPrompt}`;
-    const { sendMessage } = useChatAPI({
+
+    useEffect(() => {
+        if (!prompt) {
+            console.error('Prompt 缺失');
+            return;
+        }
+        const onMessageCompletion = (result) => {
+            if (result && result.error) {
+                console.error(result.error);
+            }
+            onCompletion && onCompletion(result);
+        };
+
+        const options = {
+            prompt,
+            model,
+            maxTokens,
+            temperature,
+            topP,
+            topK,
+            frequencyPenalty,
+            systemPrompt: fullSystemPrompt,
+            onContentUpdate,
+            onTokenUpdate,
+            onCompletion: onMessageCompletion,
+        };
+
+        let abortFunction;
+        if (source === 'silicon') {
+            abortFunction = sendSiliconMessage(options);
+        } else if (source === 'groq') {
+            abortFunction = sendGroqMessage(options);
+        } else {
+            console.error('未知的 source 参数');
+            return;
+        }
+
+        return () => {
+            if (abortFunction) abortFunction();
+        };
+    }, [
+        source,
         prompt,
         model,
-        apiKey: apiKey || envApiKey,
         maxTokens,
         temperature,
         topP,
         topK,
         frequencyPenalty,
-        systemPrompt: fullSystemPrompt,
+        fullSystemPrompt,
         onContentUpdate,
         onTokenUpdate,
         onCompletion,
-    });
-    useEffect(() => {
-        sendMessage();
-    }, [prompt, sendMessage]);
+    ]);
+
     return null;
 };
 

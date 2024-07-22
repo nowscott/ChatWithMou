@@ -1,30 +1,20 @@
-// pages/ChatPage.js
+// src/pages/ChatPage.js
 import React, { useState, useCallback, useEffect } from 'react';
-import ChatAPI from '../components/ChatAPI';
-import NavBar from '../components/layout/NavBar';
-import MessageList from '../components/layout/MessageList';
-import InputPrompt from '../components/layout/InputPrompt';
-import MessageHistory from '../components/MessageHistory';
-import SettingsModal from '../components/SettingsModal';
-import { initialSettings } from '../settingsConfig';
+import ChatAPI from 'components/ChatAPI';
+import NavBar from 'components/layout/NavBar';
+import MessageList from 'components/layout/MessageList';
+import InputPrompt from 'components/layout/InputPrompt';
+import MessageHistory from 'components/MessageHistory';
+import SettingsModal from 'components/SettingsModal';
+import { useSettings } from 'contexts/SettingsContext';
 
 const ChatPage = () => {
+    const { settings, updateSetting } = useSettings();
     const { messages, addUserMessage, addAIMessage, updateMessage, clearMessages, deleteMessage } = MessageHistory();
     const [submittedPrompt, setSubmittedPrompt] = useState('');
     const [aiMessageMid, setAiMessageMid] = useState(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMessageComplete, setIsMessageComplete] = useState(false);
-    const [settings, setSettings] = useState(JSON.parse(localStorage.getItem('settings')) || initialSettings);
-
-    useEffect(() => {
-        const apiKeyStatus = localStorage.getItem('apiKeyStatus'); 
-        if (apiKeyStatus !== 'true') {
-            setSettings((prevSettings) => ({
-                ...prevSettings,
-                apiKey: '', 
-            }));
-        }
-    }, []);
 
     const handleContentUpdate = useCallback((newContent) => {
         if (!isMessageComplete) {
@@ -57,7 +47,7 @@ const ChatPage = () => {
         setIsSettingsOpen(true);
     };
 
-    const handleCloseSettings = () => { 
+    const handleCloseSettings = () => {
         setIsSettingsOpen(false);
     };
 
@@ -70,8 +60,9 @@ const ChatPage = () => {
             <NavBar onSettingsClick={handleSettingsClick} />
             <MessageList messages={messages} onDelete={deleteMessage} />
             <InputPrompt onSend={handleSend} onClear={clearMessages} />
-            {submittedPrompt && (
+            {submittedPrompt && !isSettingsOpen && (
                 <ChatAPI
+                    source={settings.source}
                     prompt={submittedPrompt}
                     systemPrompt={settings.systemPrompt}
                     onContentUpdate={handleContentUpdate}
@@ -88,8 +79,9 @@ const ChatPage = () => {
             )}
             <SettingsModal
                 isOpen={isSettingsOpen}
-                onRequestClose={() => handleCloseSettings(settings)}
+                onRequestClose={handleCloseSettings}
                 settings={settings}
+                updateSetting={updateSetting}
             />
         </div>
     );
