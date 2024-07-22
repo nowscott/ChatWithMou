@@ -18,6 +18,7 @@ export const sendSiliconMessage = ({
 }) => {
   const controller = new AbortController();
   const { signal } = controller;
+  let shouldStop = false;
 
   const options = {
     method: 'POST',
@@ -51,12 +52,16 @@ export const sendSiliconMessage = ({
     })
     .then(reader => {
       const decoder = new TextDecoder('utf-8');
-      const read = () => {
-        reader.read().then(({ done, value }) => {
+      const read = async () => {
+        if (shouldStop) return;
+
+        try {
+          const { done, value } = await reader.read();
           if (done) {
             onCompletion && onCompletion();
             return;
           }
+
           const text = decoder.decode(value, { stream: true });
           text.split('\n').forEach(line => {
             if (line.trim() && line.trim() !== 'data: [DONE]') {
@@ -70,6 +75,7 @@ export const sendSiliconMessage = ({
                   onTokenUpdate(jsonResponse.usage.total_tokens);
                 }
                 if (jsonResponse.choices[0].finish_reason === "stop") {
+                  shouldStop = true;
                   return;
                 }
               } catch (error) {
@@ -77,8 +83,17 @@ export const sendSiliconMessage = ({
               }
             }
           });
-          read();
-        });
+
+          if (!shouldStop) {
+            read();
+          }
+        } catch (err) {
+          if (err.name === 'AbortError') {
+            console.log('请求被中止');
+          } else {
+            console.error('读取流时出错:', err);
+          }
+        }
       };
       read();
     })
