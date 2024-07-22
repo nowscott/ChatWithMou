@@ -6,34 +6,34 @@ import copy from 'copy-to-clipboard';
 import { useState, useCallback } from 'react';
 
 const CodeBlock = ({ language, value, messageId }) => {
-    const [copied, setCopied] = useState(null);
+	const [copied, setCopied] = useState(null);
 
-    const handleCopy = useCallback(() => {
-        copy(value);
-        setCopied(messageId);
-        setTimeout(() => {
-            setCopied(null);
-        }, 5000);
-    }, [value, messageId]);
+	const handleCopy = useCallback(() => {
+		copy(value);
+		setCopied(messageId);
+		setTimeout(() => {
+			setCopied(null);
+		}, 5000);
+	}, [value, messageId]);
 
-    return (
-        <div className="relative">
-            <SyntaxHighlighter
-                style={atomOneDark}
-                language={language}
-                PreTag="div"
-                className="text-sm rounded-md"
-            >
-                {value}
-            </SyntaxHighlighter>
-            <button
-                className="absolute top-2 right-2 text-xs text-sky-500"
-                onClick={handleCopy}
-            >
-                {copied === messageId ? <HiCheckCircle className="h-4 w-4 text-lime-500" /> : <HiOutlineDuplicate className="h-4 w-4" />}
-            </button>
-        </div>
-    );
+	return (
+		<div className="relative">
+			<SyntaxHighlighter
+				style={atomOneDark}
+				language={language}
+				PreTag="div"
+				className="text-sm rounded-md"
+			>
+				{value}
+			</SyntaxHighlighter>
+			<button
+				className="absolute top-2 right-2 text-xs text-sky-500"
+				onClick={handleCopy}
+			>
+				{copied === messageId ? <HiCheckCircle className="h-4 w-4 text-lime-500" /> : <HiOutlineDuplicate className="h-4 w-4" />}
+			</button>
+		</div>
+	);
 };
 
 export default CodeBlock;

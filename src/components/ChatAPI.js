@@ -11,77 +11,77 @@ let systemPrompt0 = '';
 // `;
 
 const ChatAPI = ({
-    source,
-    prompt,
-    onContentUpdate,
-    onTokenUpdate,
-    onCompletion,
-    model,
-    maxTokens,
-    temperature,
-    topP,
-    topK,
-    frequencyPenalty,
-    systemPrompt, // 可以为空
+	source,
+	prompt,
+	onContentUpdate,
+	onTokenUpdate,
+	onCompletion,
+	model,
+	maxTokens,
+	temperature,
+	topP,
+	topK,
+	frequencyPenalty,
+	systemPrompt, // 可以为空
 }) => {
-    // 使用自定义系统提示，如果提供了的话
-    const fullSystemPrompt = systemPrompt ? `${systemPrompt0}\n${systemPrompt}` : '';
+	// 使用自定义系统提示，如果提供了的话
+	const fullSystemPrompt = systemPrompt ? `${systemPrompt0}\n${systemPrompt}` : '';
 
-    useEffect(() => {
-        if (!prompt) {
-            console.error('Prompt 缺失');
-            return;
-        }
-        const onMessageCompletion = (result) => {
-            if (result && result.error) {
-                console.error(result.error);
-            }
-            onCompletion && onCompletion(result);
-        };
+	useEffect(() => {
+		if (!prompt) {
+			console.error('Prompt 缺失');
+			return;
+		}
+		const onMessageCompletion = (result) => {
+			if (result && result.error) {
+				console.error(result.error);
+			}
+			onCompletion && onCompletion(result);
+		};
 
-        const options = {
-            prompt,
-            model,
-            maxTokens,
-            temperature,
-            topP,
-            topK,
-            frequencyPenalty,
-            systemPrompt: fullSystemPrompt,
-            onContentUpdate,
-            onTokenUpdate,
-            onCompletion: onMessageCompletion,
-        };
+		const options = {
+			prompt,
+			model,
+			maxTokens,
+			temperature,
+			topP,
+			topK,
+			frequencyPenalty,
+			systemPrompt: fullSystemPrompt,
+			onContentUpdate,
+			onTokenUpdate,
+			onCompletion: onMessageCompletion,
+		};
 
-        let abortFunction;
-        if (source === 'silicon') {
-            abortFunction = sendSiliconMessage(options);
-        } else if (source === 'groq') {
-            abortFunction = sendGroqMessage(options);
-        } else {
-            console.error('未知的 source 参数');
-            return;
-        }
+		let abortFunction;
+		if (source === 'silicon') {
+			abortFunction = sendSiliconMessage(options);
+		} else if (source === 'groq') {
+			abortFunction = sendGroqMessage(options);
+		} else {
+			console.error('未知的 source 参数');
+			return;
+		}
 
-        return () => {
-            if (abortFunction) abortFunction();
-        };
-    }, [
-        source,
-        prompt,
-        model,
-        maxTokens,
-        temperature,
-        topP,
-        topK,
-        frequencyPenalty,
-        fullSystemPrompt,
-        onContentUpdate,
-        onTokenUpdate,
-        onCompletion,
-    ]);
+		return () => {
+			if (abortFunction) abortFunction();
+		};
+	}, [
+		source,
+		prompt,
+		model,
+		maxTokens,
+		temperature,
+		topP,
+		topK,
+		frequencyPenalty,
+		fullSystemPrompt,
+		onContentUpdate,
+		onTokenUpdate,
+		onCompletion,
+	]);
 
-    return null;
+	return null;
 };
 
 export default ChatAPI;
