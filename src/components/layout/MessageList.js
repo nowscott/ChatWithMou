@@ -53,7 +53,7 @@ const MessageList = ({ messages, onDelete }) => {
         code: ({ node, inline, className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '');
             const content = String(children).replace(/^\n+/, '').replace(/\n+$/, ''); // 去除开头和结尾的空行
-            return !inline && match ? (
+            return match ? (
                 <CodeBlock language={match[1]} value={content} />
             ) : (
                 <code className={`${className} whitespace-pre-wrap break-words`} {...props}>
