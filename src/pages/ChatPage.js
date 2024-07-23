@@ -41,9 +41,9 @@ const ChatPage = () => {
     addUserMessage(prompt);
     const newAiMessageId = addAIMessage();
     setAiMessageMid(newAiMessageId);
-    const formatMessage = (msg) => `${msg.role === 'user' ? '你' : 'AI'}: ${msg.content}`;
+    const formatMessage = (msg) => `${msg.role === 'user' ? 'user' : 'AI'}: ${msg.content}`;
     const chatHistory = messages.map(formatMessage).join('\n');
-    const fullPrompt = `${chatHistory}\n你: ${prompt}`;
+    const fullPrompt = `history: ${chatHistory}\nuser: ${prompt}`;
     setIsMessageComplete(false);
     setSubmittedPrompt(fullPrompt);
     setShouldSubmit(true);
