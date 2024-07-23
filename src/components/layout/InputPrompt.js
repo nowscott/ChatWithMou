@@ -40,7 +40,7 @@ const InputPrompt = ({ onSend, onClear }) => {
     return (
         <div className="flex-0 w-full bg-slate-400 dark:bg-slate-900 p-2">
             <div className="p-2 bg-white dark:bg-black rounded-lg flex items-center relative max-w-screen-md w-full mx-auto">
-                <div className="flex flex-grow items-center border-2 rounded border-slate-300 bg-stone-50 dark:bg-slate-900">
+                <div className="flex flex-grow items-center border-2 rounded border-slate-300 bg-stone-50 dark:bg-stone-900">
                     <button
                         className="p-1 text-rose-500"
                         onClick={handleClear}
