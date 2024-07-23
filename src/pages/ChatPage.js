@@ -47,6 +47,10 @@ const ChatPage = () => {
     setIsMessageComplete(false);
     setSubmittedPrompt(fullPrompt);
     setShouldSubmit(true);
+    const textarea = document.querySelector('textarea');
+    if (textarea) {
+        textarea.style.height = 'auto';
+    }
   };
 
   const handleSettingsClick = () => {
