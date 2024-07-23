@@ -29,7 +29,6 @@ export function sendGroqMessage({
 
   const fetchChatCompletion = async () => {
     try {
-      console.log(model, 'API 请求中...');
       const chatCompletion = await groq.chat.completions.create({
         messages: [
           { role: 'system', content: systemPrompt },
@@ -43,22 +42,16 @@ export function sendGroqMessage({
         stop: null,
       });
 
-      let buffer = '';
-
       for await (const chunk of chatCompletion) {
         const content = chunk.choices[0]?.delta?.content || '';
-        buffer += content;
-        onContentUpdate(buffer);
-        buffer = '';
+        onContentUpdate(content);
         if (chunk.x_groq && chunk.x_groq.usage) {
           onTokenUpdate(chunk.x_groq.usage.total_tokens);
-          console.log(chunk.x_groq.usage.total_tokens, 'API 请求成功');
         }
       }
       onCompletion();
-      console.log(model, 'API 请求成功');
     } catch (error) {
-      console.error('API 请求失败:', error);
+      onContentUpdate('在当前网络环境下该模型服务异常，请检查网络或切换其他模型');
       onCompletion({ error: '请求失败，请稍后重试。' });
     }
   };
