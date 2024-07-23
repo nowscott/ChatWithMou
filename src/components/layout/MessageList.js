@@ -71,8 +71,8 @@ const MessageList = ({ messages, onDelete }) => {
             {messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full">
                     <div className="text-center">
-                        <p className="text-6xl text-gray-500 dark:text-yellow-50 mb-4 tracking-widest">对牛弹琴</p>
-                        <p className="text-sm text-gray-400 dark:text-yellow-100">每一次对话，都是一场思想碰撞</p>
+                        <p className="text-6xl text-gray-500 dark:text-yellow-50 mb-4 tracking-widest">對🐮彈琴</p>
+                        <p className="text-sm text-gray-400 dark:text-yellow-100">每壹次對話，都是壹場思想碰撞</p>
                     </div>
                 </div>
             ) : (

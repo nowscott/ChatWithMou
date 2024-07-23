@@ -8,7 +8,7 @@ const NavBar = ({ targetRef, onSettingsClick }) => {
     const { darkMode, setDarkMode } = useContext(ThemeContext); 
 
     const toggleTitle = () => {
-        setTitle((prevTitle) => (prevTitle === 'Chat With Mou' ? '对牛弹琴' : 'Chat With Mou'));
+        setTitle((prevTitle) => (prevTitle === 'Chat With Mou' ? '對🐮彈琴' : 'Chat With Mou'));
     };
 
     const toggleDarkMode = () => {
