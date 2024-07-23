@@ -60,7 +60,7 @@ const InputPrompt = ({ onSend, onClear }) => {
                         }}
                         onCompositionStart={handleCompositionStart}
                         onCompositionEnd={handleCompositionEnd}
-                        placeholder="发送消息..."
+                        placeholder="發送訊息..."
                     />
                     <button
                         className="p-1 text-slate-500"
