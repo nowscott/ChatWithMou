@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { models, initialSettings } from '../settingsConfig';
+import { models, initialSettings } from 'config';
 
 const SettingsContext = createContext();
 
