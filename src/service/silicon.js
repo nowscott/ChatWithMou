@@ -1,3 +1,6 @@
+import ky from 'ky';
+import { handleStreamResponse } from 'utils/streamUtils'; 
+
 const apiKey = process.env.REACT_APP_SILICON_API_KEY;
 if (!apiKey) {
   throw new Error("Silicon API Key 缺失");
@@ -18,16 +21,14 @@ export const sendSiliconMessage = ({
 }) => {
   const controller = new AbortController();
   const { signal } = controller;
-  let shouldStop = false;
 
   const options = {
-    method: 'POST',
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
       authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({
+    json: {
       model,
       messages: [
         { role: 'system', content: systemPrompt },
@@ -39,65 +40,16 @@ export const sendSiliconMessage = ({
       top_k: topK,
       frequency_penalty: frequencyPenalty,
       stream: true,
-    }),
+    },
     signal,
   };
 
-  fetch('https://api.siliconflow.cn/v1/chat/completions', options)
+  ky.post('https://api.siliconflow.cn/v1/chat/completions', options)
     .then(response => {
-      if (!response.ok) {
-        throw new Error('网络响应不正常');
-      }
-      return response.body.getReader();
-    })
-    .then(reader => {
-      const decoder = new TextDecoder('utf-8');
-      const read = async () => {
-        if (shouldStop) return;
-
-        try {
-          const { done, value } = await reader.read();
-          if (done) {
-            onCompletion && onCompletion();
-            return;
-          }
-
-          const text = decoder.decode(value, { stream: true });
-          text.split('\n').forEach(line => {
-            if (line.trim() && line.trim() !== 'data: [DONE]') {
-              try {
-                const jsonResponse = JSON.parse(line.trim().replace(/^data: /, ''));
-                const delta = jsonResponse.choices[0].delta;
-                if (delta && delta.content) {
-                  onContentUpdate(delta.content);
-                }
-                if (jsonResponse.usage) {
-                  onTokenUpdate(jsonResponse.usage.total_tokens);
-                }
-                if (jsonResponse.choices[0].finish_reason === "stop") {
-                  shouldStop = true;
-                  return;
-                }
-              } catch (error) {
-                console.error('解析 JSON 时出错:', error, '行:', line);
-              }
-            }
-          });
-
-          if (!shouldStop) {
-            read();
-          }
-        } catch (err) {
-          if (err.name === 'AbortError') {
-            console.log('请求被中止');
-          } else {
-            console.error('读取流时出错:', err);
-          }
-        }
-      };
-      read();
+      handleStreamResponse(response.body.getReader(), onContentUpdate, onTokenUpdate, onCompletion);
     })
     .catch(err => {
+      onContentUpdate('在当前网络环境下该模型服务异常，请检查网络或切换其他模型');
       console.error('API 请求失败:', err);
     });
 

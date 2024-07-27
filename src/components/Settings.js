@@ -1,7 +1,7 @@
 // src/components/Settings.js
 import React, { useState, useEffect } from 'react';
 import SettingInput from './SettingInput';
-import { models, settingsConfig } from 'settingsConfig';
+import { models, settingsConfig } from 'config';
 import { useSettings } from 'contexts/SettingsContext';
 
 const Settings = () => {
